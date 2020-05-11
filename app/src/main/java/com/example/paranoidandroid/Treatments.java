@@ -39,36 +39,25 @@ public class Treatments extends AppCompatActivity {
         setContentView(R.layout.activity_treatments);
         addPatientButton = findViewById(R.id.addTreatment);
 
-/*        listView = (ListView) findViewById(R.id.patients);
-        listView.setAdapter(adapter);
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference = databaseReference.child("Paranoid Android");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    //Getting the data from snapshot
-                    Treatment treatment =
-                            postSnapshot.getValue(Treatment.class);
-                    treatmentList.add(treatment.getSickness());
-                    System.out.println(treatment.getSickness());
-                    adapter = new ArrayAdapter<>(getApplicationContext(),
-                            android.R.layout.simple_list_item_1,
-                            treatmentList);
-                    listView.setAdapter(adapter);
+       listView = (ListView) findViewById(R.id.patients);
+
+       treatmentList.add("test1");
+       treatmentList.add("test2");
+       treatmentList.add("test3");
+       treatmentList.add("test4");
+       treatmentList.add("test5");
+       treatmentList.add("test6");
+       treatmentList.add("test7");
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                treatmentList );
+
+        listView.setAdapter(arrayAdapter);
 
 
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-*//*            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }*//*
-        });
-        */
         }
     public void goToForm(View v) {
         Intent intent = new Intent(this, TreatmentForm.class);
