@@ -61,9 +61,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="72dp"
         android:layout_marginLeft="72dp"
-        android:enabled="false"
         android:layout_marginBottom="184dp"
-        android:text="Add Medicine"
+        android:enabled="false"
+        android:onClick="addMedicine"
+        android:text="Add Medicine and configure Dose"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

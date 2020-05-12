@@ -1,8 +1,9 @@
 package com.example.paranoidandroid.Model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Medicine {
+public class Medicine implements Serializable {
 
     private String refMed;
     private Date dateDebCons;
@@ -30,5 +31,14 @@ public class Medicine {
 
     public void setDuree(Integer duree) {
         this.duree = duree;
+    }
+
+    @Override
+    public String toString() {
+        return "Medicine{" +
+                "refMed='" + refMed + '\'' +
+                ", dateDebCons=" + dateDebCons +
+                ", duree=" + duree +
+                '}';
     }
 }

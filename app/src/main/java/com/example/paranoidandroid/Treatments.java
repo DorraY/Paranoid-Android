@@ -27,7 +27,7 @@ public class Treatments extends AppCompatActivity {
 
     Button addPatientButton;
     final List<String>  treatmentList = new ArrayList<>();
-    //ListView listView  =  findViewById(R.id.treatments);
+    //ListView listView = (ListView) findViewById(R.id.treatments);
 
 
     @Override
@@ -43,10 +43,9 @@ public class Treatments extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange( DataSnapshot dataSnapshot) {
-
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    treatmentList.add(postSnapshot.child("maladie").getValue().toString());
-                    System.out.println(postSnapshot.child("maladie").getValue().toString());
+//                    treatmentList.add(postSnapshot.child("maladie").getValue().toString());
+                    System.out.println(postSnapshot.child("sickness").getValue().toString());
                 }
             }
             @Override

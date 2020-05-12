@@ -1,10 +1,18 @@
 package com.example.paranoidandroid.Model;
 
-public class Temperature {
+import java.io.Serializable;
+
+public class Temperature implements Serializable {
+
+    private static Integer numberOfTemps;
 
     private Integer numTemp;
     private Double degree;
     private Treatment num_p;
+
+    public Temperature(Integer numTemp) {
+        this.numTemp = numberOfTemps++;
+    }
 
     public Integer getNumTemp() {
         return numTemp;

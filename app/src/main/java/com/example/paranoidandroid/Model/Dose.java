@@ -1,8 +1,11 @@
 package com.example.paranoidandroid.Model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Dose {
+public class Dose implements Serializable {
+
+    private static Integer numberOfDoses=0;
 
     private Integer doseId;
     private String descriiption;
@@ -10,6 +13,10 @@ public class Dose {
     private Integer hour;
     private Integer qte;
     private Medicine refMed;
+
+    public Dose() {
+        this.doseId = numberOfDoses++;
+    }
 
     public Integer getDoseId() {
         return doseId;

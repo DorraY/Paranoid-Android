@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-                goToPatients(v);
+                goToTreatments(v);
             }
         });
     }
@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    public void goToPatients(View v) {
+    public void goToTreatments(View v) {
         Intent intent = new Intent(this, Treatments.class);
         startActivity(intent);
     }

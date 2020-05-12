@@ -1,6 +1,8 @@
 package com.example.paranoidandroid.Model;
 
-public class MedicineLine {
+import java.io.Serializable;
+
+public class MedicineLine implements Serializable {
 
     private Treatment num_p;
     private Medicine refMed;

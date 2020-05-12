@@ -2,6 +2,7 @@ package com.example.paranoidandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -10,14 +11,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+import com.example.paranoidandroid.Model.Medicine;
+import com.example.paranoidandroid.Model.Treatment;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,31 +24,26 @@ import java.util.Locale;
 
 public class MedsForm extends AppCompatActivity {
     private EditText Medicine_Ref,start,end;
-
-
+    final DatabaseReference medRef = FirebaseDatabase.getInstance().getReference(
+            "Medicament");
+    final DatabaseReference linetRef = FirebaseDatabase.getInstance().getReference(
+            "Ligne_medicament");
 
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
-
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
         }
-
         @Override
         public void afterTextChanged(Editable s) {
             checkFields();
-
         }
-
     } ;
 
     void checkFields()  {
         Button b = (Button) findViewById(R.id.saveMed);
-
         String s1 = Medicine_Ref.getText().toString();
         String s2 = start.getText().toString();
         String s3 = end.getText().toString();
@@ -70,6 +63,7 @@ public class MedsForm extends AppCompatActivity {
         Medicine_Ref = (EditText) findViewById(R.id.Medicine_Ref);
         start = (EditText) findViewById(R.id.startDate);
         end = (EditText) findViewById(R.id.endDate);
+
 
         Medicine_Ref.addTextChangedListener(mTextWatcher);
         start.addTextChangedListener(mTextWatcher);
@@ -106,6 +100,38 @@ public class MedsForm extends AppCompatActivity {
     }
 
 
+    public void addMedicine(View view) throws ParseException {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Medicine medicine = new Medicine();
+
+        medicine.setDateDebCons(simpleDateFormat.parse(start.getText().toString()));
+        medicine.setDateDebCons(simpleDateFormat.parse(end.getText().toString()));
+        medicine.setRefMed(Medicine_Ref.getText().toString());
+
+        medRef.child(String.valueOf(medicine.getRefMed())).setValue(medicine);
+
+        Treatment treatment = new Treatment();
+
+        treatment = (Treatment)  getIntent().getSerializableExtra("myTreatment") ;
+
+        System.out.println("hello from the meds form " + treatment.getNum_p() );
+
+        linetRef.child(String.valueOf(treatment.getNum_p())).setValue(treatment);
+        linetRef.child(String.valueOf(treatment.getNum_p())).child(String.valueOf(medicine.getRefMed())).setValue(medicine);
 
 
+        Intent intent = new Intent(this, DoseForm.class);
+
+        intent.putExtra("myMedicine", medicine);
+
+
+
+        startActivity(intent);
+
+
+
+
+
+    }
 }
