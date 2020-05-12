@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,11 +25,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static android.app.PendingIntent.getActivity;
+
 public class Treatments extends AppCompatActivity {
 
     Button addPatientButton;
-    final List<String>  treatmentList = new ArrayList<>();
-    //ListView listView = (ListView) findViewById(R.id.treatments);
+
 
 
     @Override
@@ -40,21 +42,34 @@ public class Treatments extends AppCompatActivity {
         addPatientButton = findViewById(R.id.addTreatment);
 
         FirebaseApp.initializeApp(this);
-        final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Programme/");
+        final DatabaseReference myRef =
+                FirebaseDatabase.getInstance().getReference("Programme/");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange( DataSnapshot dataSnapshot) {
+                List<String>  treatmentList = new ArrayList<>();
+
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-//                    treatmentList.add(postSnapshot.child("maladie").getValue().toString());
-                    System.out.println(postSnapshot.child("sickness").getValue().toString());
+                    Treatment treatment = postSnapshot.getValue(Treatment.class);
+                    Integer treamentId = treatment.getNum_p();
+                    String maladie = treatment.getSickness();
+                    Log.d("TAG",treamentId+" / "+maladie);
+                    treatmentList.add(treatment.getSickness());
+
+                    //System.out.println(postSnapshot.child("sickness").getValue().toString());
                 }
+                ListView listView = (ListView) findViewById(R.id.treatments);
+                ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getApplicationContext(),
+                        android.R.layout.simple_list_item_1,treatmentList);
+                listView.setAdapter(arrayAdapter);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 System.out.println("The read failed: " );
                 System.out.println(databaseError);
             }
+
         });
 
         }
