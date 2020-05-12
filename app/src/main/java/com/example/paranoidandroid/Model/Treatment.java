@@ -6,7 +6,7 @@ import java.util.Date;
 public class Treatment {
     private int num_p ;
     private Date start_date;
-    private Date end_date;
+    private Integer duree;
     private String sickness;
 
     public Treatment() {
@@ -30,12 +30,12 @@ public class Treatment {
         this.start_date = start_date;
     }
 
-    public Date getEnd_date() {
-        return end_date;
+    public Integer getDuree() {
+        return duree;
     }
 
-    public void setEnd_date(Date end_date) {
-        this.end_date = end_date;
+    public void setDuree(Integer duree) {
+        this.duree = duree;
     }
 
     public String getSickness() {

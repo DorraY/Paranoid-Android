@@ -1,5 +1,6 @@
 package com.example.paranoidandroid;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.paranoidandroid.Model.Treatment;
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseError;
 import com.google.firebase.database.DataSnapshot;
@@ -21,42 +23,38 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Treatments extends AppCompatActivity {
 
-    ListView listView;
     Button addPatientButton;
-    List<String> treatmentList = new ArrayList<>();
-/*    ArrayAdapter<String> adapter= new ArrayAdapter<String>(this
-            ,android.R.layout.simple_dropdown_item_1line, treatmentList);*/
-
+    final List<String>  treatmentList = new ArrayList<>();
+    //ListView listView  =  findViewById(R.id.treatments);
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseApp.initializeApp(this);
+
         setContentView(R.layout.activity_treatments);
         addPatientButton = findViewById(R.id.addTreatment);
 
-       listView = (ListView) findViewById(R.id.patients);
+        FirebaseApp.initializeApp(this);
+        final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Programme/");
 
-       treatmentList.add("test1");
-       treatmentList.add("test2");
-       treatmentList.add("test3");
-       treatmentList.add("test4");
-       treatmentList.add("test5");
-       treatmentList.add("test6");
-       treatmentList.add("test7");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange( DataSnapshot dataSnapshot) {
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                treatmentList );
-
-        listView.setAdapter(arrayAdapter);
-
-
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    treatmentList.add(postSnapshot.child("maladie").getValue().toString());
+                    System.out.println(postSnapshot.child("maladie").getValue().toString());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("The read failed: " );
+                System.out.println(databaseError);
+            }
+        });
 
         }
     public void goToForm(View v) {

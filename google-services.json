@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "636671644992",
+    "firebase_url": "https://paranoid-android-49324.firebaseio.com",
+    "project_id": "paranoid-android-49324",
+    "storage_bucket": "paranoid-android-49324.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636671644992:android:89e099b2dcb1fce19b16a5",
+        "android_client_info": {
+          "package_name": "com.example.paranoidandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "636671644992-1b2pl1f6g3o99ntsgqdt9h6l21kr3dsq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.paranoidandroid",
+            "certificate_hash": "dfa71ea4799f6c73c672cf4679e07c39f20c68ca"
+          }
+        },
+        {
+          "client_id": "636671644992-uu9odaq29rne9dhfm3nlgkdkl54fetfe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd1ucCRizCSPe5Td0vfBt5hdIwgsVEQ6Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636671644992-uu9odaq29rne9dhfm3nlgkdkl54fetfe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
