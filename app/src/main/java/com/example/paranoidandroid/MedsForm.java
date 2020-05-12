@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.paranoidandroid.Model.Medicine;
+import com.example.paranoidandroid.Model.MedicineLine;
 import com.example.paranoidandroid.Model.Treatment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,17 +39,25 @@ public class MedsForm extends AppCompatActivity {
         }
         @Override
         public void afterTextChanged(Editable s) {
-            checkFields();
+            try {
+                checkFields();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     } ;
 
-    void checkFields()  {
+    void checkFields() throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        Date startDate = simpleDateFormat.parse(start.getText().toString());
+        Date endDate = simpleDateFormat.parse(end.getText().toString());
         Button b = (Button) findViewById(R.id.saveMed);
         String s1 = Medicine_Ref.getText().toString();
         String s2 = start.getText().toString();
         String s3 = end.getText().toString();
 
-        if(s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) || !validateJavaDate(s3)){
+        if( startDate.after(endDate)||s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) || !validateJavaDate(s3)){
             b.setEnabled(false);
         } else {
             b.setEnabled(true);
@@ -69,7 +78,11 @@ public class MedsForm extends AppCompatActivity {
         start.addTextChangedListener(mTextWatcher);
         end.addTextChangedListener(mTextWatcher);
 
-        checkFields();
+        try {
+            checkFields();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         String date_n = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(new Date());
@@ -105,26 +118,38 @@ public class MedsForm extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Medicine medicine = new Medicine();
 
+        Date startDate = simpleDateFormat.parse(start.getText().toString());
+
         medicine.setDateDebCons(simpleDateFormat.parse(start.getText().toString()));
+        startDate.setYear(startDate.getYear()+1900);
+        startDate.setMonth(startDate.getMonth()+1);
+
+        Date endDate = simpleDateFormat.parse(end.getText().toString());
+        endDate.setYear(endDate.getYear()+1900);
+        endDate.setMonth(endDate.getMonth()+1);
+
         medicine.setDateDebCons(simpleDateFormat.parse(end.getText().toString()));
         medicine.setRefMed(Medicine_Ref.getText().toString());
 
         medRef.child(String.valueOf(medicine.getRefMed())).setValue(medicine);
 
-        Treatment treatment = new Treatment();
-
+        Treatment treatment ;
         treatment = (Treatment)  getIntent().getSerializableExtra("myTreatment") ;
 
         System.out.println("hello from the meds form " + treatment.getNum_p() );
 
-        linetRef.child(String.valueOf(treatment.getNum_p())).setValue(treatment);
-        linetRef.child(String.valueOf(treatment.getNum_p())).child(String.valueOf(medicine.getRefMed())).setValue(medicine);
+        MedicineLine medicineLine = new MedicineLine();
+        medicineLine.setNum_p(treatment);
+        medicineLine.setRefMed(medicine);
 
+        linetRef.child(String.valueOf(medicineLine.getNum_p().getNum_p())).setValue(medicineLine);
+
+/*        linetRef.child(String.valueOf(treatment.getNum_p())).setValue(treatment);
+        linetRef.child(String.valueOf(treatment.getNum_p())).child(String.valueOf(medicine.getRefMed())).setValue(medicine);*/
 
         Intent intent = new Intent(this, DoseForm.class);
 
         intent.putExtra("myMedicine", medicine);
-
 
 
         startActivity(intent);

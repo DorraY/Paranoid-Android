@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.paranoidandroid.Model.Dose;
 import com.example.paranoidandroid.Model.Medicine;
@@ -18,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class DoseForm extends AppCompatActivity {
 
@@ -35,29 +37,30 @@ public class DoseForm extends AppCompatActivity {
         }
         @Override
         public void afterTextChanged(Editable s) {
-            checkFields();
+            try {
+                checkFields();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     } ;
 
-    void checkFields()  {
+    void checkFields() throws ParseException {
 
         Button b1 = (Button) findViewById(R.id.newDose);
-        Button b2 = (Button) findViewById(R.id.newMedicine);
-        Button b3 = (Button) findViewById(R.id.endTreatment);
+        Button b2 = (Button) findViewById(R.id.endTreatment);
 
         String s1 = description.getText().toString();
         String s2 = startDate.getText().toString();
         String s3 = time.getText().toString();
         String s4 = quantity.getText().toString();
 
-        if(s4.equals("")||s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) ){
+        if( s4.equals("")||s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) ){
             b1.setEnabled(false);
             b2.setEnabled(false);
-            b3.setEnabled(false);
         } else {
             b1.setEnabled(true);
             b2.setEnabled(true);
-            b3.setEnabled(true);
 
         }
     }
@@ -94,6 +97,22 @@ public class DoseForm extends AppCompatActivity {
         time = (EditText) findViewById(R.id.time);
         quantity = (EditText) findViewById(R.id.quantity);
 
+        description.addTextChangedListener(mTextWatcher);
+        startDate.addTextChangedListener(mTextWatcher);
+        time.addTextChangedListener(mTextWatcher);
+        quantity.addTextChangedListener(mTextWatcher);
+
+        try {
+            checkFields();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String date_n = new SimpleDateFormat("dd/MM/yyyy",
+                Locale.getDefault()).format(new Date());
+        TextView date  = (TextView) findViewById(R.id.startDate);
+        date.setText(date_n);
+
 
     }
 
@@ -115,22 +134,32 @@ public class DoseForm extends AppCompatActivity {
 
 
 
-
-
-
-
         Intent intent = new Intent(this, Treatments.class);
         startActivity(intent);
     }
 
-    public void addMedicine(View view) {
-        Intent intent = new Intent(this, MedsForm.class);
-        startActivity(intent);
-    }
+
+    public void addDose(View view) throws ParseException {
+
+        Medicine medicine = (Medicine)
+                getIntent().getSerializableExtra("myMedicine");
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        Dose dose = new Dose();
+        dose.setDate(simpleDateFormat.parse(startDate.getText().toString()));
+        dose.setDescriiption(description.getText().toString());
+        dose.setHour(Integer.valueOf(time.getText().toString()));
+        dose.setQte(Integer.valueOf(quantity.getText().toString()));
+        dose.setRefMed(medicine);
+
+        doseRef.child(String.valueOf(dose.getDoseId())).setValue(dose);
 
 
-    public void addDose(View view) {
+
         Intent intent = new Intent(this, DoseForm.class);
+
+        intent.putExtra("myMedicine", medicine);
         startActivity(intent);
     }
 }

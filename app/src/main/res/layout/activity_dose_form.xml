@@ -80,38 +80,24 @@
         android:id="@+id/newDose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="2dp"
-        android:layout_marginRight="2dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:enabled="false"
         android:onClick="addDose"
-        android:enabled="false"
         android:text="Add another dose"
-        app:layout_constraintBaseline_toBaselineOf="@+id/newMedicine"
-        app:layout_constraintEnd_toStartOf="@+id/newMedicine"
+        app:layout_constraintBaseline_toBaselineOf="@+id/endTreatment"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/newMedicine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="13dp"
-        android:layout_marginRight="13dp"
-        android:layout_marginBottom="19dp"
-        android:onClick="addMedicine"
-        android:enabled="false"
-        android:text="Add another medicine"
-        app:layout_constraintBottom_toTopOf="@+id/endTreatment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/newDose" />
 
     <Button
         android:id="@+id/endTreatment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="29dp"
-        android:onClick="goToTreatments"
+        android:layout_marginBottom="16dp"
         android:enabled="false"
+        android:onClick="goToTreatments"
         android:text="Validate treatment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.931"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

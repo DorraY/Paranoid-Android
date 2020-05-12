@@ -34,18 +34,28 @@ public class TreatmentForm extends AppCompatActivity {
         }
         @Override
         public void afterTextChanged(Editable s) {
-            checkFields();
+            try {
+                checkFields();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     } ;
 
-    void checkFields(){
+    void checkFields() throws ParseException {
         Button b = (Button) findViewById(R.id.save);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        String s2 = start.getText().toString();
-        String s3 = end.getText().toString();
-        String s4 = sickness.getText().toString();
 
-        if(s2.equals("") ||s3.equals("") || s4.equals("") || !validateJavaDate(s2) || !validateJavaDate(s3)){
+        Date startDate = simpleDateFormat.parse(start.getText().toString());
+        Date endDate = simpleDateFormat.parse(end.getText().toString());
+
+        String s1 = start.getText().toString();
+        String s2 = end.getText().toString();
+        String s3 = sickness.getText().toString();
+
+
+        if(s1.equals("") || startDate.after(endDate) ||s2.equals("") || s3.equals("") || !validateJavaDate(s1) || !validateJavaDate(s2)){
             b.setEnabled(false);
         } else {
             b.setEnabled(true);
@@ -65,7 +75,11 @@ public class TreatmentForm extends AppCompatActivity {
         end.addTextChangedListener(mTextWatcher);
         sickness.addTextChangedListener(mTextWatcher);
 
-        checkFields();
+        try {
+            checkFields();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         String date_n = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(new Date());
@@ -87,6 +101,7 @@ public class TreatmentForm extends AppCompatActivity {
          */
         try {
             Date javaDate = simpleDateFormat.parse(strDate);
+
             System.out.println(strDate + " is valid date format");
         }
         /* Date format is invalid */ catch (ParseException e) {
@@ -100,11 +115,20 @@ public class TreatmentForm extends AppCompatActivity {
     public void goToMedecines(View v) throws ParseException {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
         Treatment treatment = new Treatment();
         treatment.setSickness(sickness.getText().toString());
-        treatment.setStart_date(simpleDateFormat.parse(start.getText().toString()));
-        treatment.setEnd_date(simpleDateFormat.parse(end.getText().toString()));
 
+        Date startDate = simpleDateFormat.parse(start.getText().toString());
+        startDate.setYear(startDate.getYear()+1900);
+        startDate.setMonth(startDate.getMonth()+1);
+
+        Date endDate = simpleDateFormat.parse(end.getText().toString());
+        endDate.setYear(endDate.getYear()+1900);
+        endDate.setMonth(endDate.getMonth()+1);
+
+        treatment.setStart_date(startDate);
+        treatment.setEnd_date(endDate);
 
         myRef.child(String.valueOf(treatment.getNum_p())).setValue(treatment);
 
