@@ -44,7 +44,8 @@ public class Treatments extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange( DataSnapshot dataSnapshot) {
-                List<String>  treatmentList = new ArrayList<>();
+                List<String>  sicknesstList = new ArrayList<>();
+                final List<Treatment> treatmentList = new ArrayList<>();
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
 
@@ -52,21 +53,27 @@ public class Treatments extends AppCompatActivity {
 /*                    treatment.setNumberOfTreatments(treatment.getNumberOfTreatments()-1);
                     treatment.setNum_p(treatment.getNum_p()-1);*/
                     Integer treamentId = treatment.getNum_p();
-                    String maladie = treatment.getSickness();
-                    Log.d("TAG",treamentId+" / "+maladie);
-                    treatmentList.add(treatment.getSickness());
-
+                    String sickness = treatment.getSickness();
+                    Log.d("TAG",treamentId+" / "+sickness);
+                    sicknesstList.add(treatment.getSickness());
+                    treatmentList.add(treatment);
                 }
+
                 ListView listView = (ListView) findViewById(R.id.treatments);
                 ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getApplicationContext(),
-                        android.R.layout.simple_list_item_1,treatmentList);
+                        android.R.layout.simple_list_item_1,sicknesstList);
                 listView.setAdapter(arrayAdapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String selectedItem = (String) parent.getItemAtPosition(position);
-                        System.out.println(selectedItem);
                         Intent intent = new Intent(getApplicationContext(), TreatmentDetailsActivity.class);
+
+                        int i=0;
+                        while(!treatmentList.get(i).getSickness().equals(selectedItem)) {
+                            i++;
+                        }
+                        intent.putExtra("selectedTreatment", treatmentList.get(i));
                         startActivity(intent);
                     }
                 });

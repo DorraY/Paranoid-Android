@@ -125,7 +125,7 @@ public class DoseForm extends AppCompatActivity {
 
         Dose dose = new Dose();
         dose.setDate(simpleDateFormat.parse(startDate.getText().toString()));
-        dose.setDescriiption(description.getText().toString());
+        dose.setDescription(description.getText().toString());
         dose.setHour(Integer.valueOf(time.getText().toString()));
         dose.setQte(Integer.valueOf(quantity.getText().toString()));
         dose.setRefMed(medicine);
@@ -148,7 +148,7 @@ public class DoseForm extends AppCompatActivity {
 
         Dose dose = new Dose();
         dose.setDate(simpleDateFormat.parse(startDate.getText().toString()));
-        dose.setDescriiption(description.getText().toString());
+        dose.setDescription(description.getText().toString());
         dose.setHour(Integer.valueOf(time.getText().toString()));
         dose.setQte(Integer.valueOf(quantity.getText().toString()));
         dose.setRefMed(medicine);

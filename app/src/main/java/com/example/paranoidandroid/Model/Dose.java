@@ -8,7 +8,7 @@ public class Dose implements Serializable {
     private static Integer numberOfDoses=0;
 
     private Integer doseId;
-    private String descriiption;
+    private String description;
     private Date date;
     private Integer hour;
     private Integer qte;
@@ -26,12 +26,12 @@ public class Dose implements Serializable {
         this.doseId = doseId;
     }
 
-    public String getDescriiption() {
-        return descriiption;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescriiption(String descriiption) {
-        this.descriiption = descriiption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getDate() {
