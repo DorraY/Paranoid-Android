@@ -13,8 +13,17 @@ public class Treatment implements Serializable {
     private Date end_date;
     private String sickness;
 
+    public  Integer getNumberOfTreatments() {
+        return numberOfTreatments;
+    }
+
+    public  void setNumberOfTreatments(Integer numberOfTreatments) {
+        Treatment.numberOfTreatments = numberOfTreatments;
+    }
+
     public Treatment() {
         this.num_p = numberOfTreatments++;
+
 
     }
 

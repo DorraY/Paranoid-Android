@@ -135,6 +135,8 @@ public class MedsForm extends AppCompatActivity {
 
         Treatment treatment ;
         treatment = (Treatment)  getIntent().getSerializableExtra("myTreatment") ;
+        treatment.setNumberOfTreatments(treatment.getNumberOfTreatments()-1);
+        treatment.setNum_p(treatment.getNum_p());
 
         System.out.println("hello from the meds form " + treatment.getNum_p() );
 
