@@ -120,6 +120,7 @@ public class TreatmentForm extends AppCompatActivity {
         treatment.setSickness(sickness.getText().toString());
 
         Date startDate = simpleDateFormat.parse(start.getText().toString());
+
         startDate.setYear(startDate.getYear()+1900);
         startDate.setMonth(startDate.getMonth()+1);
 
