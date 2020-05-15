@@ -121,12 +121,7 @@ public class TreatmentForm extends AppCompatActivity {
 
         Date startDate = simpleDateFormat.parse(start.getText().toString());
 
-        startDate.setYear(startDate.getYear()+1900);
-        startDate.setMonth(startDate.getMonth()+1);
-
         Date endDate = simpleDateFormat.parse(end.getText().toString());
-        endDate.setYear(endDate.getYear()+1900);
-        endDate.setMonth(endDate.getMonth()+1);
 
         treatment.setStart_date(startDate);
         treatment.setEnd_date(endDate);
