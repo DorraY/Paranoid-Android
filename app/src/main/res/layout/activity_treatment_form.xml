@@ -28,6 +28,7 @@
         android:layout_marginTop="224dp"
         android:hint="End Date"
         android:inputType="date"
+        android:text="31/05/2020"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,6 +40,7 @@
         android:layout_marginLeft="48dp"
         android:layout_marginTop="320dp"
         android:hint="Sickness"
+        android:text="covid19"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.paranoidandroid.Model.Treatment;
-import com.example.paranoidandroid.ui.login.LoginActivity;
 import com.google.firebase.FirebaseApp;
 
 import com.google.firebase.database.DataSnapshot;
@@ -24,13 +23,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.sql.Time;
-import java.time.LocalTime;
+
 import java.util.ArrayList;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Formatter;
+
 import java.util.List;
 
 public class Treatments extends AppCompatActivity {

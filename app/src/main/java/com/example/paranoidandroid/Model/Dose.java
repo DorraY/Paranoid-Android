@@ -1,7 +1,6 @@
 package com.example.paranoidandroid.Model;
 
 import java.io.Serializable;
-import java.time.LocalTime;
 import java.util.Date;
 
 public class Dose implements Serializable {
@@ -11,7 +10,7 @@ public class Dose implements Serializable {
     private Integer doseId;
     private String description;
     private Date date;
-    private LocalTime hour;
+    private Integer time;
     private Integer qte;
     private Medicine refMed;
 
@@ -43,12 +42,12 @@ public class Dose implements Serializable {
         this.date = date;
     }
 
-    public LocalTime getHour() {
-        return hour;
+    public Integer getTime() {
+        return time;
     }
 
-    public void setHour(LocalTime hour) {
-        this.hour = hour;
+    public void setTime(Integer time) {
+        this.time = time;
     }
 
     public Integer getQte() {
@@ -65,5 +64,17 @@ public class Dose implements Serializable {
 
     public void setRefMed(Medicine refMed) {
         this.refMed = refMed;
+    }
+
+    @Override
+    public String toString() {
+        return "Dose{" +
+                "doseId=" + doseId +
+                ", description='" + description + '\'' +
+                ", date=" + date +
+                ", time=" + time +
+                ", qte=" + qte +
+                ", refMed=" + refMed +
+                '}';
     }
 }

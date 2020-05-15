@@ -59,7 +59,7 @@ public class DoseForm extends AppCompatActivity {
         String s3 = time.getText().toString();
         String s4 = quantity.getText().toString();
 
-        if(!s3.matches("^([0-2][0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")|| s4.equals("")||s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) ){
+        if(!s3.matches("^([0-1][0-9]|2[0-3])$")|| s4.equals("")||s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) ){
             b1.setEnabled(false);
             b2.setEnabled(false);
         } else {
@@ -118,7 +118,7 @@ public class DoseForm extends AppCompatActivity {
         date.setText(date_n);
 
         TextView time = (TextView) findViewById(R.id.time);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.FRANCE);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH", Locale.FRANCE);
         LocalTime currentTime = LocalTime.now();
         String timeString = formatter.format(currentTime);
         time.setText(timeString);
@@ -137,13 +137,13 @@ public class DoseForm extends AppCompatActivity {
         Dose dose = new Dose();
         dose.setDate(simpleDateFormat.parse(startDate.getText().toString()));
         dose.setDescription(description.getText().toString());
-        //dose.setHour(Integer.valueOf(time.getText().toString()));
+        //dose.setTime(Integer.valueOf(time.getText().toString()));
 
         dose.setQte(Integer.valueOf(quantity.getText().toString()));
         dose.setRefMed(medicine);
 
-        LocalTime localTime = LocalTime.parse((time.getText().toString()));
-        dose.setHour(localTime);
+        Integer doseTime = Integer.valueOf(time.getText().toString());
+        dose.setTime(doseTime);
 
         doseRef.child(String.valueOf(dose.getDoseId())).setValue(dose);
 
@@ -168,14 +168,12 @@ public class DoseForm extends AppCompatActivity {
         Dose dose = new Dose();
         dose.setDate(simpleDateFormat.parse(startDate.getText().toString()));
         dose.setDescription(description.getText().toString());
-        LocalTime localTime = LocalTime.parse((time.getText().toString()));
-        dose.setHour(localTime);
+        Integer doseTime = Integer.valueOf(time.getText().toString());
+        dose.setTime(doseTime);
         dose.setQte(Integer.valueOf(quantity.getText().toString()));
         dose.setRefMed(medicine);
 
         doseRef.child(String.valueOf(dose.getDoseId())).setValue(dose);
-
-
 
         Intent intent = new Intent(this, DoseForm.class);
 

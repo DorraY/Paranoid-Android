@@ -7,7 +7,7 @@ public class Medicine implements Serializable {
 
     private String refMed;
     private Date dateDebCons;
-    private Integer duree;
+    private Date dateEnd;
 
     public String getRefMed() {
         return refMed;
@@ -25,12 +25,12 @@ public class Medicine implements Serializable {
         this.dateDebCons = dateDebCons;
     }
 
-    public Integer getDuree() {
-        return duree;
+    public Date getDateEnd() {
+        return dateEnd;
     }
 
-    public void setDuree(Integer duree) {
-        this.duree = duree;
+    public void setDateEnd(Date dateEnd) {
+        this.dateEnd = dateEnd;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Medicine implements Serializable {
         return "Medicine{" +
                 "refMed='" + refMed + '\'' +
                 ", dateDebCons=" + dateDebCons +
-                ", duree=" + duree +
+                ", dateEnd=" + dateEnd +
                 '}';
     }
 }

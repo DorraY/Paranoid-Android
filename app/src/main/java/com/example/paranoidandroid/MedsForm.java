@@ -119,16 +119,12 @@ public class MedsForm extends AppCompatActivity {
         Medicine medicine = new Medicine();
 
         Date startDate = simpleDateFormat.parse(start.getText().toString());
+        Date endDate = simpleDateFormat.parse(end.getText().toString());
 
         medicine.setDateDebCons(simpleDateFormat.parse(start.getText().toString()));
-        startDate.setYear(startDate.getYear());
-        startDate.setMonth(startDate.getMonth());
 
-        Date endDate = simpleDateFormat.parse(end.getText().toString());
-        endDate.setYear(endDate.getYear());
-        endDate.setMonth(endDate.getMonth());
+        medicine.setDateEnd(simpleDateFormat.parse(end.getText().toString()));
 
-        medicine.setDateDebCons(simpleDateFormat.parse(end.getText().toString()));
         medicine.setRefMed(Medicine_Ref.getText().toString());
 
         medRef.child(String.valueOf(medicine.getRefMed())).setValue(medicine);

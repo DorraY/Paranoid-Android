@@ -1,20 +1,22 @@
 package com.example.paranoidandroid;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.example.paranoidandroid.Model.MedicineLine;
+import com.example.paranoidandroid.Model.Dose;
+import com.example.paranoidandroid.Model.Medicine;
 import com.example.paranoidandroid.Model.Treatment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,10 +27,12 @@ import java.util.Locale;
 public class TreatmentDetailsActivity extends AppCompatActivity {
 
     private EditText sickness,startDate, endDate;
-    final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference(
+    final DatabaseReference treatmentRef = FirebaseDatabase.getInstance().getReference(
             "Programme");
     final DatabaseReference linetRef = FirebaseDatabase.getInstance().getReference(
             "Ligne_medicament");
+    final DatabaseReference doseRef =
+            FirebaseDatabase.getInstance().getReference("Dose/");
 
 /*    private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -48,7 +52,7 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
     } ;*/
 
 /*    void checkFields() throws ParseException {
-        Button b = (Button) findViewById(R.id.save);
+        Button b =    findViewById(R.id.save);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         Date startDate = simpleDateFormat.parse(startDate.getText().toString());
@@ -70,26 +74,42 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println(new Date().getHours());
+        System.out.println(new Date().getMinutes());
+
+
+
         setContentView(R.layout.activity_treatment_details);
         Treatment treatment = (Treatment)
                 getIntent().getSerializableExtra("selectedTreatment");
-
-        System.out.println(treatment);
 
         String startDateString = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(treatment.getStart_date());
         String endDateString = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(treatment.getEnd_date());
 
-        startDate = (EditText) findViewById(R.id.startDate);
+        (linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").child("refMed")).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                System.out.println(" im here "  +dataSnapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        startDate =   findViewById(R.id.startDate);
         startDate.setText(startDateString);
         //startDate.addTextChangedListener(mTextWatcher);
 
-        endDate = (EditText) findViewById(R.id.endDate);
+        endDate =   findViewById(R.id.endDate);
         endDate.setText(endDateString);
         //endDate.addTextChangedListener(mTextWatcher);
 
-        sickness =(EditText) findViewById(R.id.sickness);
+        sickness =  findViewById(R.id.sickness);
         sickness.setText(treatment.getSickness());
         //sickness.addTextChangedListener(mTextWatcher);
 
@@ -123,11 +143,11 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
     public void updateTreatment(View view) throws ParseException {
         Treatment treatment = (Treatment)
                 getIntent().getSerializableExtra("selectedTreatment");
-        endDate = (EditText) findViewById(R.id.endDate);
-        sickness =(EditText) findViewById(R.id.sickness);
-        startDate = (EditText) findViewById(R.id.startDate);
+        endDate =   findViewById(R.id.endDate);
+        sickness =  findViewById(R.id.sickness);
+        startDate =   findViewById(R.id.startDate);
 
-        Button b = (Button) findViewById(R.id.update);
+        Button b =    findViewById(R.id.update);
         if (b.getText().equals("Update")) {
             sickness.setEnabled(true);
             startDate.setEnabled(true);
@@ -147,7 +167,7 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
             Date end = simpleDateFormat.parse(endDate.getText().toString());
             treatment.setStart_date(start);
             treatment.setEnd_date(end);
-            myRef.child(String.valueOf(treatment.getNum_p())).setValue(treatment);
+            treatmentRef.child(String.valueOf(treatment.getNum_p())).setValue(treatment);
             b.setText("Update");
         }
 
@@ -160,33 +180,60 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
         String endDateString = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(treatment.getEnd_date());
 
-        startDate = (EditText) findViewById(R.id.startDate);
+        startDate =   findViewById(R.id.startDate);
         startDate.setText(startDateString);
         //startDate.addTextChangedListener(mTextWatcher);
 
-        endDate = (EditText) findViewById(R.id.endDate);
+        endDate =   findViewById(R.id.endDate);
         endDate.setText(endDateString);
         //endDate.addTextChangedListener(mTextWatcher);
 
-        sickness =(EditText) findViewById(R.id.sickness);
+        sickness =  findViewById(R.id.sickness);
         sickness.setText(treatment.getSickness());
 
     }
 
     public void deleteTreatment(View view) {
-        Treatment treatment = (Treatment)
+        final Treatment treatment = (Treatment)
                 getIntent().getSerializableExtra("selectedTreatment");
 
-        myRef.child(String.valueOf(treatment.getNum_p())).removeValue();
+        linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final String medicine = dataSnapshot.getValue(String.class);
+                System.out.println(" selected medicine "+ dataSnapshot.getValue(String.class));
+                doseRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
+                            Dose dose = doseSnapshot.getValue(Dose.class);
+                            System.out.println(dose.getRefMed().getRefMed().equals(medicine));
+                            System.out.println(dose.getRefMed().getRefMed());
+
+                            if (dose.getRefMed().getRefMed().equals(medicine)) {
+                                doseRef.child(String.valueOf(dose.getDoseId())).removeValue();
+                                System.out.println("deleted successfuly");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        }) ;
+
+        treatmentRef.child(String.valueOf(treatment.getNum_p())).removeValue();
         linetRef.child(String.valueOf(treatment.getNum_p())).removeValue();
 
-
         Intent intent =  new Intent(this,Treatments.class);
-
         startActivity(intent);
-
-
-
-
     }
 }
