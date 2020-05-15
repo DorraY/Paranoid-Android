@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.paranoidandroid.Model.MedicineLine;
 import com.example.paranoidandroid.Model.Treatment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -26,6 +27,8 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
     private EditText sickness,startDate, endDate;
     final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference(
             "Programme");
+    final DatabaseReference linetRef = FirebaseDatabase.getInstance().getReference(
+            "Ligne_medicament");
 
 /*    private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -175,6 +178,9 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
                 getIntent().getSerializableExtra("selectedTreatment");
 
         myRef.child(String.valueOf(treatment.getNum_p())).removeValue();
+        linetRef.child(String.valueOf(treatment.getNum_p())).removeValue();
+
+
         Intent intent =  new Intent(this,Treatments.class);
 
         startActivity(intent);

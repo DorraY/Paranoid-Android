@@ -1,9 +1,11 @@
 package com.example.paranoidandroid;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,8 +24,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Formatter;
 import java.util.List;
 
 public class Treatments extends AppCompatActivity {
@@ -88,7 +95,10 @@ public class Treatments extends AppCompatActivity {
         });
 
         }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void goToForm(View v) {
+
+
         Intent intent = new Intent(this, TreatmentForm.class);
         startActivity(intent);
     }

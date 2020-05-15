@@ -146,9 +146,6 @@ public class MedsForm extends AppCompatActivity {
 
         linetRef.child(String.valueOf(medicineLine.getNum_p().getNum_p())).setValue(medicineLine);
 
-/*        linetRef.child(String.valueOf(treatment.getNum_p())).setValue(treatment);
-        linetRef.child(String.valueOf(treatment.getNum_p())).child(String.valueOf(medicine.getRefMed())).setValue(medicine);*/
-
         Intent intent = new Intent(this, DoseForm.class);
 
         intent.putExtra("myMedicine", medicine);
