@@ -32,7 +32,10 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
     final DatabaseReference linetRef = FirebaseDatabase.getInstance().getReference(
             "Ligne_medicament");
     final DatabaseReference doseRef =
-            FirebaseDatabase.getInstance().getReference("Dose/");
+            FirebaseDatabase.getInstance().getReference("Dose");
+    String selectedMedicine;
+
+
 
 /*    private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -74,14 +77,24 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println(new Date().getHours());
-        System.out.println(new Date().getMinutes());
 
+        Treatment treatment = (Treatment)
+                getIntent().getSerializableExtra("selectedTreatment");
+
+        linetRef.child(treatment.getNum_p().toString()).child("refMed").child("refMed").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                selectedMedicine= String.valueOf(dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
         setContentView(R.layout.activity_treatment_details);
-        Treatment treatment = (Treatment)
-                getIntent().getSerializableExtra("selectedTreatment");
 
         String startDateString = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(treatment.getStart_date());
@@ -183,39 +196,26 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
         final Treatment treatment = (Treatment)
                 getIntent().getSerializableExtra("selectedTreatment");
 
-        linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").child("refMed").addValueEventListener(new ValueEventListener() {
+        doseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                final String medicine = dataSnapshot.getValue(String.class);
-                System.out.println(" selected medicine "+ medicine);
-                doseRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
-                            System.out.println(doseSnapshot.getValue());
-                            Dose dose = doseSnapshot.getValue(Dose.class);
-                            System.out.println(  " 666 "  + dose.getRefMed().getRefMed().equals(medicine));
-                            System.out.println(  "  420  "  + dose.getRefMed().getRefMed());
+                for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
+                    System.out.println(doseSnapshot.getValue());
+                    Dose dose = doseSnapshot.getValue(Dose.class);
+                    System.out.println(selectedMedicine);
 
-                            if (dose.getRefMed().getRefMed().equals(medicine)) {
-                                doseRef.child(String.valueOf(dose.getDoseId())).removeValue();
-                                System.out.println("deleted successfuly");
-                            }
-                        }
+                    if (dose.getRefMed().getRefMed().equals(selectedMedicine)) {
+                        doseRef.child(String.valueOf(dose.getDoseId())).removeValue();
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        }) ;
+        });
+
 
         treatmentRef.child(String.valueOf(treatment.getNum_p())).removeValue();
         linetRef.child(String.valueOf(treatment.getNum_p())).removeValue();
