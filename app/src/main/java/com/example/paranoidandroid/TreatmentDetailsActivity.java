@@ -88,19 +88,6 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
         String endDateString = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(treatment.getEnd_date());
 
-        (linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").child("refMed")).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                System.out.println(" im here "  +dataSnapshot.getValue(String.class));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
         startDate =   findViewById(R.id.startDate);
         startDate.setText(startDateString);
         //startDate.addTextChangedListener(mTextWatcher);
@@ -112,7 +99,6 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
         sickness =  findViewById(R.id.sickness);
         sickness.setText(treatment.getSickness());
         //sickness.addTextChangedListener(mTextWatcher);
-
     }
 
     public static boolean validateJavaDate(String strDate) {
@@ -197,18 +183,19 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
         final Treatment treatment = (Treatment)
                 getIntent().getSerializableExtra("selectedTreatment");
 
-        linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").addValueEventListener(new ValueEventListener() {
+        linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").child("refMed").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final String medicine = dataSnapshot.getValue(String.class);
-                System.out.println(" selected medicine "+ dataSnapshot.getValue(String.class));
+                System.out.println(" selected medicine "+ medicine);
                 doseRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
+                            System.out.println(doseSnapshot.getValue());
                             Dose dose = doseSnapshot.getValue(Dose.class);
-                            System.out.println(dose.getRefMed().getRefMed().equals(medicine));
-                            System.out.println(dose.getRefMed().getRefMed());
+                            System.out.println(  " 666 "  + dose.getRefMed().getRefMed().equals(medicine));
+                            System.out.println(  "  420  "  + dose.getRefMed().getRefMed());
 
                             if (dose.getRefMed().getRefMed().equals(medicine)) {
                                 doseRef.child(String.valueOf(dose.getDoseId())).removeValue();

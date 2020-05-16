@@ -9,8 +9,8 @@ public class Dose implements Serializable {
 
     private Integer doseId;
     private String description;
-    private Date date;
-    private Integer time;
+    private Date dateAndTime;
+    private Date time;
     private Integer qte;
     private Medicine refMed;
 
@@ -34,19 +34,19 @@ public class Dose implements Serializable {
         this.description = description;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDateAndTime() {
+        return dateAndTime;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateAndTime(Date dateAndTime) {
+        this.dateAndTime = dateAndTime;
     }
 
-    public Integer getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(Integer time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 
@@ -71,7 +71,7 @@ public class Dose implements Serializable {
         return "Dose{" +
                 "doseId=" + doseId +
                 ", description='" + description + '\'' +
-                ", date=" + date +
+                ", dateAndTime=" + dateAndTime +
                 ", time=" + time +
                 ", qte=" + qte +
                 ", refMed=" + refMed +

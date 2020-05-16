@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
+import java.util.Date;
 import java.util.List;
 
 public class Treatments extends AppCompatActivity {
@@ -37,14 +38,15 @@ public class Treatments extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         setContentView(R.layout.activity_treatments);
         addPatientButton = findViewById(R.id.addTreatment);
 
         FirebaseApp.initializeApp(this);
-        final DatabaseReference myRef =
+        final DatabaseReference programmeRef =
                 FirebaseDatabase.getInstance().getReference("Programme/");
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        programmeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange( DataSnapshot dataSnapshot) {
                 List<String>  sicknesstList = new ArrayList<>();

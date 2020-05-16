@@ -59,7 +59,7 @@ public class DoseForm extends AppCompatActivity {
         String s3 = time.getText().toString();
         String s4 = quantity.getText().toString();
 
-        if(!s3.matches("^([0-1][0-9]|2[0-3])$")|| s4.equals("")||s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) ){
+        if(!s3.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")|| s4.equals("")||s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) ){
             b1.setEnabled(false);
             b2.setEnabled(false);
         } else {
@@ -118,7 +118,7 @@ public class DoseForm extends AppCompatActivity {
         date.setText(date_n);
 
         TextView time = (TextView) findViewById(R.id.time);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH", Locale.FRANCE);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.FRANCE);
         LocalTime currentTime = LocalTime.now();
         String timeString = formatter.format(currentTime);
         time.setText(timeString);
@@ -133,24 +133,24 @@ public class DoseForm extends AppCompatActivity {
                 getIntent().getSerializableExtra("myMedicine");
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm");
 
         Dose dose = new Dose();
-        dose.setDate(simpleDateFormat.parse(startDate.getText().toString()));
+        Date dateAndTime = new Date();
+        dateAndTime.setYear(simpleDateFormat.parse(startDate.getText().toString()).getYear());
+        dateAndTime.setMonth(simpleDateFormat.parse(startDate.getText().toString()).getMonth());
+        dateAndTime.setDate(simpleDateFormat.parse(startDate.getText().toString()).getDate());
+        dateAndTime.setHours((simpleTimeFormat.parse(time.getText().toString())).getHours());
+        dateAndTime.setMinutes((simpleTimeFormat.parse(time.getText().toString())).getMinutes());
+        //dose.setDateAndTime(simpleDateFormat.parse(startDate.getText().toString()));
         dose.setDescription(description.getText().toString());
-        //dose.setTime(Integer.valueOf(time.getText().toString()));
-
+        dose.setDateAndTime(dateAndTime);
         dose.setQte(Integer.valueOf(quantity.getText().toString()));
         dose.setRefMed(medicine);
 
-        Integer doseTime = Integer.valueOf(time.getText().toString());
-        dose.setTime(doseTime);
+        //dose.setTime(simpleTimeFormat.parse(time.getText().toString()));
 
         doseRef.child(String.valueOf(dose.getDoseId())).setValue(dose);
-
-
-
-
-
 
         Intent intent = new Intent(this, Treatments.class);
         startActivity(intent);
@@ -164,12 +164,24 @@ public class DoseForm extends AppCompatActivity {
                 getIntent().getSerializableExtra("myMedicine");
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm");
+
+        Date dateAndTime = new Date();
+
+        dateAndTime.setYear(simpleDateFormat.parse(startDate.getText().toString()).getYear());
+        dateAndTime.setMonth(simpleDateFormat.parse(startDate.getText().toString()).getMonth());
+        dateAndTime.setDate(simpleDateFormat.parse(startDate.getText().toString()).getDate());
+        dateAndTime.setHours((simpleTimeFormat.parse(time.getText().toString())).getHours());
+        dateAndTime.setMinutes((simpleTimeFormat.parse(time.getText().toString())).getMinutes());
 
         Dose dose = new Dose();
-        dose.setDate(simpleDateFormat.parse(startDate.getText().toString()));
+        //dose.setDateAndTime(simpleDateFormat.parse(startDate.getText().toString()));
+        dose.setDateAndTime(dateAndTime);
         dose.setDescription(description.getText().toString());
-        Integer doseTime = Integer.valueOf(time.getText().toString());
-        dose.setTime(doseTime);
+
+        //dose.setTime(simpleTimeFormat.parse(time.getText().toString()));
+
+
         dose.setQte(Integer.valueOf(quantity.getText().toString()));
         dose.setRefMed(medicine);
 
