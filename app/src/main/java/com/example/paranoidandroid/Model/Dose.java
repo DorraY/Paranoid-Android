@@ -66,6 +66,14 @@ public class Dose implements Serializable {
         this.refMed = refMed;
     }
 
+    public static Integer getNumberOfDoses() {
+        return numberOfDoses;
+    }
+
+    public static void setNumberOfDoses(Integer numberOfDoses) {
+        Dose.numberOfDoses = numberOfDoses;
+    }
+
     @Override
     public String toString() {
         return "Dose{" +

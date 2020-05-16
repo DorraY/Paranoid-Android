@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TreatmentDetails">
+    tools:context=".MedicineDetails">
 
     <TextView
         android:id="@+id/title"
@@ -13,7 +13,7 @@
         android:layout_marginTop="96dp"
         android:capitalize="characters"
         android:clickable="false"
-        android:text="Treatment Details"
+        android:text="Associated Medicine Details"
         android:textAllCaps="true"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,8 +28,8 @@
         android:layout_marginStart="56dp"
         android:layout_marginLeft="56dp"
         android:layout_marginBottom="96dp"
-        android:text="Delete"
         android:onClick="deleteTreatment"
+        android:text="Delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/details"
@@ -39,9 +39,9 @@
         android:id="@+id/update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginBottom="112dp"
         android:onClick="updateTreatment"
         android:text="Update"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -119,11 +119,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:onClick="goToMedicineDetails"
-        android:text="Check medicine"
+        android:text="Check Doses"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.394"
         app:layout_constraintStart_toEndOf="@+id/abandon"
-        app:layout_constraintTop_toBottomOf="@+id/details" />
+        app:layout_constraintTop_toBottomOf="@+id/details"
+        app:layout_constraintVertical_bias="1.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,7 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-import java.util.Date;
 import java.util.List;
 
 public class Treatments extends AppCompatActivity {
@@ -72,7 +71,7 @@ public class Treatments extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String selectedItem = (String) parent.getItemAtPosition(position);
-                        Intent intent = new Intent(getApplicationContext(), TreatmentDetailsActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), TreatmentDetails.class);
 
                         int i=0;
                         while(!treatmentList.get(i).getSickness().equals(selectedItem)) {

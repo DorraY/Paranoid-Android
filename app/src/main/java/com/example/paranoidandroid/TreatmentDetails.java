@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class TreatmentDetailsActivity extends AppCompatActivity {
+public class TreatmentDetails extends AppCompatActivity {
 
     private EditText sickness,startDate, endDate;
     final DatabaseReference treatmentRef = FirebaseDatabase.getInstance().getReference(
@@ -33,6 +33,8 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
             "Ligne_medicament");
     final DatabaseReference doseRef =
             FirebaseDatabase.getInstance().getReference("Dose");
+    final DatabaseReference medRef =
+            FirebaseDatabase.getInstance().getReference("Medicament");
     String selectedMedicine;
 
 
@@ -85,6 +87,29 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 selectedMedicine= String.valueOf(dataSnapshot.getValue());
+                System.out.println("##" + selectedMedicine);
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        doseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
+                    System.out.println(doseSnapshot.getValue());
+                    Dose dose = doseSnapshot.getValue(Dose.class);
+
+                    if (dose.getRefMed().getRefMed().equals(selectedMedicine)) {
+                        doseRef.child(String.valueOf(dose.getDoseId())).removeValue();
+                    }
+                    Dose.setNumberOfDoses(Dose.getNumberOfDoses()-1);
+                    dose.setDoseId(Dose.getNumberOfDoses());
+                }
+
             }
 
             @Override
@@ -202,12 +227,13 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
                 for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
                     System.out.println(doseSnapshot.getValue());
                     Dose dose = doseSnapshot.getValue(Dose.class);
-                    System.out.println(selectedMedicine);
-
                     if (dose.getRefMed().getRefMed().equals(selectedMedicine)) {
                         doseRef.child(String.valueOf(dose.getDoseId())).removeValue();
                     }
+                    Dose.setNumberOfDoses(Dose.getNumberOfDoses()-1);
+                    dose.setDoseId(Dose.getNumberOfDoses());
                 }
+
             }
 
             @Override
@@ -221,6 +247,28 @@ public class TreatmentDetailsActivity extends AppCompatActivity {
         linetRef.child(String.valueOf(treatment.getNum_p())).removeValue();
 
         Intent intent =  new Intent(this,Treatments.class);
+        startActivity(intent);
+    }
+
+    public void goToMedicineDetails(View view) {
+        final Treatment treatment = (Treatment)
+                getIntent().getSerializableExtra("selectedTreatment");
+        final Intent intent =  new Intent(this,MedicineDetails.class);
+
+/*
+        linetRef.child(String.valueOf(treatment.getNum_p())).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Medicine medicine = dataSnapshot.getValue(Medicine.class);
+                intent.putExtra("myMedicine", medicine);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        })  ;*/
+
         startActivity(intent);
     }
 }
