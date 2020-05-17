@@ -31,7 +31,7 @@ import java.util.List;
 
 public class Treatments extends AppCompatActivity {
 
-    Button addPatientButton;
+    Button addTreatmentButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class Treatments extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_treatments);
-        addPatientButton = findViewById(R.id.addTreatment);
+        addTreatmentButton = findViewById(R.id.addTreatment);
 
         FirebaseApp.initializeApp(this);
         final DatabaseReference programmeRef =
@@ -51,9 +51,9 @@ public class Treatments extends AppCompatActivity {
                 List<String>  sicknesstList = new ArrayList<>();
                 final List<Treatment> treatmentList = new ArrayList<>();
 
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                for (DataSnapshot treatmentSnapshot : dataSnapshot.getChildren()) {
 
-                    Treatment treatment = postSnapshot.getValue(Treatment.class);
+                    Treatment treatment = treatmentSnapshot.getValue(Treatment.class);
 /*                    treatment.setNumberOfTreatments(treatment.getNumberOfTreatments()-1);
                     treatment.setNum_p(treatment.getNum_p()-1);*/
                     Integer treamentId = treatment.getNum_p();
@@ -79,6 +79,7 @@ public class Treatments extends AppCompatActivity {
                         }
                         intent.putExtra("selectedTreatment", treatmentList.get(i));
                         startActivity(intent);
+                        //finish();
                     }
                 });
 
@@ -98,6 +99,7 @@ public class Treatments extends AppCompatActivity {
 
         Intent intent = new Intent(this, TreatmentForm.class);
         startActivity(intent);
+        //finish();
     }
 
 

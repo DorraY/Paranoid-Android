@@ -146,8 +146,8 @@ public class MedsForm extends AppCompatActivity {
 
         intent.putExtra("myMedicine", medicine);
 
-
         startActivity(intent);
+        finish();
 
 
 

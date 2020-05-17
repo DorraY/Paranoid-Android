@@ -134,6 +134,7 @@ public class TreatmentForm extends AppCompatActivity {
         intent.putExtra("myTreatment", treatment);
 
         startActivity(intent);
+        finish();
     }
 
 }

@@ -36,6 +36,7 @@ public class TreatmentDetails extends AppCompatActivity {
     final DatabaseReference medRef =
             FirebaseDatabase.getInstance().getReference("Medicament");
     String selectedMedicine;
+    Medicine associatedMedicine;
 
 
 
@@ -83,11 +84,26 @@ public class TreatmentDetails extends AppCompatActivity {
         Treatment treatment = (Treatment)
                 getIntent().getSerializableExtra("selectedTreatment");
 
+        assert treatment != null;
         linetRef.child(treatment.getNum_p().toString()).child("refMed").child("refMed").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                selectedMedicine= String.valueOf(dataSnapshot.getValue());
-                System.out.println("##" + selectedMedicine);
+                assert dataSnapshot.getValue() != null;
+                medRef.child((dataSnapshot.getValue()).toString()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        assert dataSnapshot.getValue() != null;
+
+                        associatedMedicine = dataSnapshot.getValue(Medicine.class);
+                        System.out.println("associated medicine "+associatedMedicine);
+                        selectedMedicine = associatedMedicine.getRefMed();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
             }
             @Override
@@ -183,17 +199,17 @@ public class TreatmentDetails extends AppCompatActivity {
             startDate.setEnabled(false);
             endDate.setEnabled(false);
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-            treatment.setSickness(sickness.getText().toString());
+        treatment.setSickness(sickness.getText().toString());
 
-            Date start = simpleDateFormat.parse(startDate.getText().toString());
-            Date end = simpleDateFormat.parse(endDate.getText().toString());
-            treatment.setStart_date(start);
-            treatment.setEnd_date(end);
-            treatmentRef.child(String.valueOf(treatment.getNum_p())).setValue(treatment);
-            b.setText("Update");
-        }
+        Date start = simpleDateFormat.parse(startDate.getText().toString());
+        Date end = simpleDateFormat.parse(endDate.getText().toString());
+        treatment.setStart_date(start);
+        treatment.setEnd_date(end);
+        treatmentRef.child(String.valueOf(treatment.getNum_p())).setValue(treatment);
+        b.setText("Update");
+    }
 
     }
     public void AbandonModifications(View view) {
@@ -248,27 +264,18 @@ public class TreatmentDetails extends AppCompatActivity {
 
         Intent intent =  new Intent(this,Treatments.class);
         startActivity(intent);
+        finish();
     }
 
     public void goToMedicineDetails(View view) {
-        final Treatment treatment = (Treatment)
+        final Treatment selectedTreatment = (Treatment)
                 getIntent().getSerializableExtra("selectedTreatment");
         final Intent intent =  new Intent(this,MedicineDetails.class);
-
-/*
-        linetRef.child(String.valueOf(treatment.getNum_p())).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Medicine medicine = dataSnapshot.getValue(Medicine.class);
-                intent.putExtra("myMedicine", medicine);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        })  ;*/
+        intent.putExtra("selectedTreatment", selectedTreatment);
+        intent.putExtra("selectedMedicine", associatedMedicine);
+        System.out.println(associatedMedicine);
 
         startActivity(intent);
+        finish();
     }
 }

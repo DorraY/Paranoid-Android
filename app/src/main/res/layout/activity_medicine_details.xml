@@ -22,20 +22,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginLeft="56dp"
-        android:layout_marginBottom="96dp"
-        android:onClick="deleteTreatment"
-        android:text="Delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/details"
-        app:layout_constraintVertical_bias="0.961" />
-
-    <Button
         android:id="@+id/update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,7 +73,7 @@
         app:layout_constraintTop_toBottomOf="@+id/startDate" />
 
     <EditText
-        android:id="@+id/sickness"
+        android:id="@+id/refMed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="72dp"
@@ -120,6 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:text="Check Doses"
+        android:onClick="checkDoses"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.394"

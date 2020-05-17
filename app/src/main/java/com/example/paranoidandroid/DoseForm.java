@@ -191,5 +191,6 @@ public class DoseForm extends AppCompatActivity {
 
         intent.putExtra("myMedicine", medicine);
         startActivity(intent);
+        finish();
     }
 }
