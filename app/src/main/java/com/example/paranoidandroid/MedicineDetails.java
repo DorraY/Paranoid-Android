@@ -40,7 +40,6 @@ public class MedicineDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine_details);
         Medicine medicine  = (Medicine) getIntent().getSerializableExtra("selectedMedicine");
-        System.out.println("selected medicine from the med details " + medicine);
 
         if (medicine!=null) {
             String startDateString = new SimpleDateFormat("dd/MM/yyyy",
@@ -107,9 +106,7 @@ public class MedicineDetails extends AppCompatActivity {
             Date end = simpleDateFormat.parse(endDate.getText().toString());
             medicine.setDateDebCons(start);
             medicine.setDateEnd(end);
-
             medRef.child(String.valueOf(medicine.getRefMed())).setValue(medicine);
-
             linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").setValue(medicine);
             b.setText("Update");
         }
@@ -121,7 +118,11 @@ public class MedicineDetails extends AppCompatActivity {
     }
 
     public void checkDoses(View view) {
+        final Medicine medicine  = (Medicine)
+                getIntent().getSerializableExtra("selectedMedicine");
         Intent intent = new Intent(this, Doses.class);
+        intent.putExtra("selectedMedicine",medicine);
+
         startActivity(intent);
         finish();
     }
@@ -143,30 +144,24 @@ public class MedicineDetails extends AppCompatActivity {
                 for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
                     System.out.println("number of existing doses "+Dose.getNumberOfDoses());
                     Dose dose = doseSnapshot.getValue(Dose.class);
-/*                    dose.setNumberOfDoses(dose.getNumberOfDoses()-1);
-                    dose.setDoseId(Dose.getNumberOfDoses()-1);
-                    System.out.println("this dose ID "+dose.getDoseId());*/
-
-
                     if (medicine!=null && dose!=null && dose.getRefMed()!=null) {
                         System.out.println(medicine.getRefMed());
                         System.out.println(dose.getRefMed().getRefMed());
                         if (dose.getRefMed().getRefMed().equals(medicine.getRefMed())) {
-                            doseRef.child(String.valueOf(dose.getDoseId())).removeValue();
+                            doseRef.child(doseSnapshot.getKey()).removeValue();
+
                         }
                     }
 
                 }
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
-
-        final Intent intent =  new Intent(this,Treatments.class);
+        Intent intent =  new Intent(this,Treatments.class);
+        intent.putExtra("selectedMedicine",medicine);
         startActivity(intent);
         finish();
 

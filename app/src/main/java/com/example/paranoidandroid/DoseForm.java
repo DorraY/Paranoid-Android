@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +30,9 @@ public class DoseForm extends AppCompatActivity {
 
     private EditText description,startDate,time,quantity;
 
-    final DatabaseReference doseRef = FirebaseDatabase.getInstance().getReference(
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
+    final DatabaseReference doseRef = firebaseDatabase.getReference(
             "Dose");
 
     private TextWatcher mTextWatcher = new TextWatcher() {
@@ -51,8 +54,8 @@ public class DoseForm extends AppCompatActivity {
 
     void checkFields() throws ParseException {
 
-        Button b1 = (Button) findViewById(R.id.newDose);
-        Button b2 = (Button) findViewById(R.id.endTreatment);
+        Button b1 = findViewById(R.id.newDose);
+        Button b2 = findViewById(R.id.endTreatment);
 
         String s1 = description.getText().toString();
         String s2 = startDate.getText().toString();
@@ -96,10 +99,10 @@ public class DoseForm extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dose_form);
-        description = (EditText) findViewById(R.id.description);
-        startDate = (EditText) findViewById(R.id.startDate);
-        time = (EditText) findViewById(R.id.time);
-        quantity = (EditText) findViewById(R.id.quantity);
+        description = findViewById(R.id.description);
+        startDate = findViewById(R.id.startDate);
+        time = findViewById(R.id.time);
+        quantity = findViewById(R.id.quantity);
 
         description.addTextChangedListener(mTextWatcher);
         startDate.addTextChangedListener(mTextWatcher);
@@ -114,10 +117,10 @@ public class DoseForm extends AppCompatActivity {
 
         String date_n = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(new Date());
-        TextView date  = (TextView) findViewById(R.id.startDate);
+        TextView date  = findViewById(R.id.startDate);
         date.setText(date_n);
 
-        TextView time = (TextView) findViewById(R.id.time);
+        TextView time = findViewById(R.id.time);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.FRANCE);
         LocalTime currentTime = LocalTime.now();
         String timeString = formatter.format(currentTime);
@@ -150,7 +153,13 @@ public class DoseForm extends AppCompatActivity {
 
         //dose.setTime(simpleTimeFormat.parse(time.getText().toString()));
 
-        doseRef.child(String.valueOf(dose.getDoseId())).push().setValue(dose);
+
+        //doseRef.child(String.valueOf(dose.getDoseId())).push().setValue(dose);
+        //doseRef.push().setValue(dose);
+
+        DatabaseReference newRow = doseRef.push();
+        dose.setDoseId(newRow.getKey());
+        newRow.setValue(dose);
 
         Intent intent = new Intent(this, Treatments.class);
         startActivity(intent);
@@ -179,13 +188,15 @@ public class DoseForm extends AppCompatActivity {
         dose.setDateAndTime(dateAndTime);
         dose.setDescription(description.getText().toString());
 
-        //dose.setTime(simpleTimeFormat.parse(time.getText().toString()));
-
 
         dose.setQte(Integer.valueOf(quantity.getText().toString()));
         dose.setRefMed(medicine);
 
-        doseRef.child(String.valueOf(dose.getDoseId())).push().setValue(dose);
+
+        DatabaseReference newRow = doseRef.push();
+        dose.setDoseId(newRow.getKey());
+        newRow.setValue(dose);
+
 
         Intent intent = new Intent(this, DoseForm.class);
 

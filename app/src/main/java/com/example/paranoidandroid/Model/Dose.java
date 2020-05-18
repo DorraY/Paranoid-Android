@@ -7,7 +7,7 @@ public class Dose implements Serializable {
 
     private static Integer numberOfDoses=0;
 
-    private Integer doseId;
+    private String doseId;
     private String description;
     private Date dateAndTime;
     private Date time;
@@ -15,14 +15,14 @@ public class Dose implements Serializable {
     private Medicine refMed;
 
     public Dose() {
-        this.doseId = numberOfDoses++;
+        numberOfDoses++;
     }
 
-    public Integer getDoseId() {
+    public String getDoseId() {
         return doseId;
     }
 
-    public void setDoseId(Integer doseId) {
+    public void setDoseId(String doseId) {
         this.doseId = doseId;
     }
 
@@ -77,7 +77,6 @@ public class Dose implements Serializable {
     @Override
     public String toString() {
         return "Dose{" +
-                "doseId=" + doseId +
                 ", description='" + description + '\'' +
                 ", dateAndTime=" + dateAndTime +
                 ", time=" + time +

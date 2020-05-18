@@ -42,13 +42,17 @@ public class Doses extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<String> doseDescriptionList = new ArrayList<>();
                 final List <Dose> doseList = new ArrayList<>();
-
+                final Medicine medicine  = (Medicine)
+                        getIntent().getSerializableExtra("selectedMedicine");
+                System.out.println("selectedMedicine " + medicine);
                 for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
                     Dose dose = doseSnapshot.getValue(Dose.class);
-                    Integer doseId = dose.getDoseId();
                     String description = dose.getDescription();
-                    doseDescriptionList.add(description);
-                    doseList.add(dose);
+                    System.out.println(doseRef.push().getKey());
+                    if (dose.getRefMed().getRefMed().equals(medicine.getRefMed())) {
+                        doseDescriptionList.add(description);
+                        doseList.add(dose);
+                    }
                 }
                 ListView listView = findViewById(R.id.doses);
                 ArrayAdapter arrayAdapter = new ArrayAdapter<>(getApplicationContext(),
@@ -63,6 +67,7 @@ public class Doses extends AppCompatActivity {
                         while(!doseList.get(i).getDescription().equals(selectedItem)) {
                             i++;
                         }
+                        intent.putExtra("selectedDoseId",doseList.get(i).getDoseId());
                         intent.putExtra("selectedDose",doseList.get(i));
                         startActivity(intent);
                         finish();
@@ -77,5 +82,13 @@ public class Doses extends AppCompatActivity {
                 System.out.println(databaseError);
             }
         });
+    }
+
+    public void addDose(View view) {
+        final Medicine medicine  = (Medicine)
+                getIntent().getSerializableExtra("selectedMedicine");
+        Intent intent = new Intent(getApplicationContext(),DoseForm.class);
+        intent.putExtra("myMedicine",medicine);
+        startActivity(intent);
     }
 }

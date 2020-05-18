@@ -199,4 +199,9 @@ public class TreatmentDetails extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    public void goTemperature(View view) {
+
+
+    }
 }
