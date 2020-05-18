@@ -201,7 +201,14 @@ public class TreatmentDetails extends AppCompatActivity {
     }
 
     public void goTemperature(View view) {
+        final Treatment selectedTreatment = (Treatment)
+                getIntent().getSerializableExtra("selectedTreatment");
 
+        Intent intent = new Intent(getApplicationContext(),Temperatures.class);
+        intent.putExtra("selectedTreatment",selectedTreatment);
+        startActivity(intent);
+
+        finish();
 
     }
 }

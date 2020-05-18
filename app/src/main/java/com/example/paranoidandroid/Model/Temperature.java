@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class Temperature implements Serializable {
 
-    private static Integer numberOfTemps;
+    private static Integer numberOfTemps=0;
 
     private Integer numTemp;
     private Double degree;
     private Treatment num_p;
 
-    public Temperature(Integer numTemp) {
+    public Temperature() {
         this.numTemp = numberOfTemps++;
     }
 

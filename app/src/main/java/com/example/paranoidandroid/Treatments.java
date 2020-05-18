@@ -99,7 +99,7 @@ public class Treatments extends AppCompatActivity {
 
         Intent intent = new Intent(this, TreatmentForm.class);
         startActivity(intent);
-        //finish();
+        finish();
     }
 
 
