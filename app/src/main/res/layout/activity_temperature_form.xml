@@ -27,6 +27,7 @@
         android:layout_marginLeft="113dp"
         android:layout_marginBottom="155dp"
         android:onClick="addTemperature"
+        android:enabled="false"
         android:text="Add Temperature"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

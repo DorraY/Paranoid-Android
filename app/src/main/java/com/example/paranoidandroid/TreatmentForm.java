@@ -67,9 +67,9 @@ public class TreatmentForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_treatment_form);
-        start = (EditText) findViewById(R.id.startDate);
-        end = (EditText) findViewById(R.id.endDate);
-        sickness = (EditText) findViewById(R.id.Sickness);
+        start =  findViewById(R.id.startDate);
+        end =  findViewById(R.id.endDate);
+        sickness = findViewById(R.id.Sickness);
 
         start.addTextChangedListener(mTextWatcher);
         end.addTextChangedListener(mTextWatcher);

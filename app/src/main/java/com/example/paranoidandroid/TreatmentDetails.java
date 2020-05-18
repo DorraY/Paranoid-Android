@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +29,7 @@ import java.util.Locale;
 public class TreatmentDetails extends AppCompatActivity {
 
     private EditText sickness,startDate, endDate;
+
     final DatabaseReference treatmentRef = FirebaseDatabase.getInstance().getReference(
             "Programme");
     final DatabaseReference linetRef = FirebaseDatabase.getInstance().getReference(
@@ -38,9 +41,60 @@ public class TreatmentDetails extends AppCompatActivity {
     String selectedMedicine;
     Medicine associatedMedicine;
 
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+        @Override
+        public void afterTextChanged(Editable s) {
+            try {
+                checkFields();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    } ;
+
+    void checkFields() throws ParseException {
+        Button b =  findViewById(R.id.update);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        String s1 = startDate.getText().toString();
+        String s2 = endDate.getText().toString();
+        String s3 = sickness.getText().toString();
+
+        Date start = simpleDateFormat.parse(startDate.getText().toString());
+        Date end = simpleDateFormat.parse(endDate.getText().toString());
+
+
+        if(s1.equals("") || start.after(end) ||s2.equals("") || s3.equals("") || !validateJavaDate(s1) || !validateJavaDate(s2)){
+            b.setEnabled(false);
+        } else {
+            b.setEnabled(true);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_treatment_details);
+
+        startDate =  findViewById(R.id.startDate);
+        endDate =  findViewById(R.id.endDate);
+        sickness = findViewById(R.id.sickness);
+
+        startDate.addTextChangedListener(mTextWatcher);
+        endDate.addTextChangedListener(mTextWatcher);
+        sickness.addTextChangedListener(mTextWatcher);
+
+        try {
+            checkFields();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         Treatment treatment = (Treatment)
                 getIntent().getSerializableExtra("selectedTreatment");
@@ -77,24 +131,17 @@ public class TreatmentDetails extends AppCompatActivity {
 
 
 
-        setContentView(R.layout.activity_treatment_details);
 
         String startDateString = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(treatment.getStart_date());
         String endDateString = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(treatment.getEnd_date());
 
-        startDate =   findViewById(R.id.startDate);
         startDate.setText(startDateString);
-        //startDate.addTextChangedListener(mTextWatcher);
 
-        endDate =   findViewById(R.id.endDate);
         endDate.setText(endDateString);
-        //endDate.addTextChangedListener(mTextWatcher);
 
-        sickness =  findViewById(R.id.sickness);
         sickness.setText(treatment.getSickness());
-        //sickness.addTextChangedListener(mTextWatcher);
     }
 
     public static boolean validateJavaDate(String strDate) {

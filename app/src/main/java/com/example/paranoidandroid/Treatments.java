@@ -95,8 +95,6 @@ public class Treatments extends AppCompatActivity {
         }
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void goToForm(View v) {
-
-
         Intent intent = new Intent(this, TreatmentForm.class);
         startActivity(intent);
         finish();

@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,7 +36,63 @@ public class MedicineDetails extends AppCompatActivity {
     final DatabaseReference treatmentRef = FirebaseDatabase.getInstance().getReference(
             "Programme");
 
+    private TextWatcher mTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+        @Override
+        public void afterTextChanged(Editable s) {
+            try {
+                checkFields();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    } ;
 
+    public static boolean validateJavaDate(String strDate) {
+
+        /*
+         * Set preferred date format,
+         * For example MM-dd-yyyy, MM.dd.yyyy,dd.MM.yyyy etc.*/
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        simpleDateFormat.setLenient(false);
+        /* Create Date object
+         * parse the string into date
+         */
+        try {
+            Date javaDate = simpleDateFormat.parse(strDate);
+
+            System.out.println(strDate + " is valid date format");
+        }
+        /* Date format is invalid */ catch (ParseException e) {
+            System.out.println(strDate + " is Invalid Date format");
+            return false;
+        }
+        /* Return true if date format is valid */
+        return true;
+    }
+    void checkFields() throws ParseException {
+        Button b =  findViewById(R.id.update);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        String s1 = startDate.getText().toString();
+        String s2 = endDate.getText().toString();
+        String s3 = refMed.getText().toString();
+
+        Date start = simpleDateFormat.parse(startDate.getText().toString());
+        Date end = simpleDateFormat.parse(endDate.getText().toString());
+
+
+        if(s1.equals("") || start.after(end) ||s2.equals("") || s3.equals("") || !validateJavaDate(s1) || !validateJavaDate(s2)){
+            b.setEnabled(false);
+        } else {
+            b.setEnabled(true);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("med details created");
@@ -42,20 +100,31 @@ public class MedicineDetails extends AppCompatActivity {
         setContentView(R.layout.activity_medicine_details);
         Medicine medicine  = (Medicine) getIntent().getSerializableExtra("selectedMedicine");
 
+        startDate =   findViewById(R.id.startDate);
+        endDate =   findViewById(R.id.endDate);
+        refMed = findViewById(R.id.refMed);
+
+        startDate.addTextChangedListener(mTextWatcher);
+        endDate.addTextChangedListener(mTextWatcher);
+        refMed.addTextChangedListener(mTextWatcher);
+
+        try {
+            checkFields();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         if (medicine!=null) {
             String startDateString = new SimpleDateFormat("dd/MM/yyyy",
                     Locale.getDefault()).format(medicine.getDateDebCons());
             String endDateString = new SimpleDateFormat("dd/MM/yyyy",
                     Locale.getDefault()).format(medicine.getDateEnd());
-            startDate =   findViewById(R.id.startDate);
             startDate.setText(startDateString);
             //startDate.addTextChangedListener(mTextWatcher);
 
-            endDate =   findViewById(R.id.endDate);
             endDate.setText(endDateString);
             //endDate.addTextChangedListener(mTextWatcher);
 
-            refMed = findViewById(R.id.refMed);
             refMed.setText(medicine.getRefMed());
         }
 
@@ -70,19 +139,17 @@ public class MedicineDetails extends AppCompatActivity {
                 Locale.getDefault()).format(medicine.getDateEnd());
         startDate =   findViewById(R.id.startDate);
         startDate.setText(startDateString);
-        //startDate.addTextChangedListener(mTextWatcher);
 
         endDate =   findViewById(R.id.endDate);
         endDate.setText(endDateString);
-        //endDate.addTextChangedListener(mTextWatcher);
 
         refMed = findViewById(R.id.refMed);
         refMed.setText(medicine.getRefMed());
 
     }
 
-    public void updateTreatment(View view) throws ParseException {
-        Medicine medicine  = (Medicine) getIntent().getSerializableExtra("selectedMedicine");
+    public void updateMedicine(View view) throws ParseException {
+        final Medicine medicine  = (Medicine) getIntent().getSerializableExtra("selectedMedicine");
         Treatment treatment = (Treatment) getIntent().getSerializableExtra("selectedTreatment");
         startDate =   findViewById(R.id.startDate);
         endDate =   findViewById(R.id.endDate);
@@ -107,9 +174,35 @@ public class MedicineDetails extends AppCompatActivity {
             Date end = simpleDateFormat.parse(endDate.getText().toString());
             medicine.setDateDebCons(start);
             medicine.setDateEnd(end);
+
             medRef.child(String.valueOf(medicine.getRefMed())).setValue(medicine);
             linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").setValue(medicine);
             b.setText("Update");
+            doseRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
+                        System.out.println("number of existing doses "+Dose.getNumberOfDoses());
+                        Dose dose = doseSnapshot.getValue(Dose.class);
+                        if (medicine!=null && dose!=null && dose.getRefMed()!=null) {
+                            System.out.println(medicine.getRefMed());
+                            System.out.println(dose.getRefMed().getRefMed());
+                            if (dose.getRefMed().getRefMed().equals(medicine.getRefMed())) {
+                                //doseSnapshot.getValue(Dose.class).setRefMed(medicine);
+                                //doseRef.child(doseSnapshot.getKey()).c
+                                System.out.println( " bla bla bla  "    +doseRef.child(doseSnapshot.getKey()).child("refMed").setValue(medicine));
+
+
+                            }
+                        }
+
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
 
 

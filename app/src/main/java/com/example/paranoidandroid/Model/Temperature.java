@@ -37,4 +37,12 @@ public class Temperature implements Serializable {
     public void setNum_p(Treatment num_p) {
         this.num_p = num_p;
     }
+
+    public static Integer getNumberOfTemps() {
+        return numberOfTemps;
+    }
+
+    public static void setNumberOfTemps(Integer numberOfTemps) {
+        Temperature.numberOfTemps = numberOfTemps;
+    }
 }
