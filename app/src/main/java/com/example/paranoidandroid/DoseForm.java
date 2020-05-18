@@ -150,7 +150,7 @@ public class DoseForm extends AppCompatActivity {
 
         //dose.setTime(simpleTimeFormat.parse(time.getText().toString()));
 
-        doseRef.child(String.valueOf(dose.getDoseId())).setValue(dose);
+        doseRef.child(String.valueOf(dose.getDoseId())).push().setValue(dose);
 
         Intent intent = new Intent(this, Treatments.class);
         startActivity(intent);
@@ -185,7 +185,7 @@ public class DoseForm extends AppCompatActivity {
         dose.setQte(Integer.valueOf(quantity.getText().toString()));
         dose.setRefMed(medicine);
 
-        doseRef.child(String.valueOf(dose.getDoseId())).setValue(dose);
+        doseRef.child(String.valueOf(dose.getDoseId())).push().setValue(dose);
 
         Intent intent = new Intent(this, DoseForm.class);
 

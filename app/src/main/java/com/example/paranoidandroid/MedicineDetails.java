@@ -1,5 +1,6 @@
 package com.example.paranoidandroid;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,10 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.paranoidandroid.Model.Dose;
 import com.example.paranoidandroid.Model.Medicine;
 import com.example.paranoidandroid.Model.Treatment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +29,10 @@ public class MedicineDetails extends AppCompatActivity {
             FirebaseDatabase.getInstance().getReference("Medicament");
     final DatabaseReference linetRef = FirebaseDatabase.getInstance().getReference(
             "Ligne_medicament");
+    final DatabaseReference doseRef =
+            FirebaseDatabase.getInstance().getReference("Dose");
+    final DatabaseReference treatmentRef = FirebaseDatabase.getInstance().getReference(
+            "Programme");
 
 
     @Override
@@ -31,20 +40,25 @@ public class MedicineDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine_details);
         Medicine medicine  = (Medicine) getIntent().getSerializableExtra("selectedMedicine");
-        String startDateString = new SimpleDateFormat("dd/MM/yyyy",
-                Locale.getDefault()).format(medicine.getDateDebCons());
-        String endDateString = new SimpleDateFormat("dd/MM/yyyy",
-                Locale.getDefault()).format(medicine.getDateEnd());
-        startDate =   findViewById(R.id.startDate);
-        startDate.setText(startDateString);
-        //startDate.addTextChangedListener(mTextWatcher);
+        System.out.println("selected medicine from the med details " + medicine);
 
-        endDate =   findViewById(R.id.endDate);
-        endDate.setText(endDateString);
-        //endDate.addTextChangedListener(mTextWatcher);
+        if (medicine!=null) {
+            String startDateString = new SimpleDateFormat("dd/MM/yyyy",
+                    Locale.getDefault()).format(medicine.getDateDebCons());
+            String endDateString = new SimpleDateFormat("dd/MM/yyyy",
+                    Locale.getDefault()).format(medicine.getDateEnd());
+            startDate =   findViewById(R.id.startDate);
+            startDate.setText(startDateString);
+            //startDate.addTextChangedListener(mTextWatcher);
 
-        refMed = findViewById(R.id.refMed);
-        refMed.setText(medicine.getRefMed());
+            endDate =   findViewById(R.id.endDate);
+            endDate.setText(endDateString);
+            //endDate.addTextChangedListener(mTextWatcher);
+
+            refMed = findViewById(R.id.refMed);
+            refMed.setText(medicine.getRefMed());
+        }
+
 
     }
 
@@ -97,10 +111,7 @@ public class MedicineDetails extends AppCompatActivity {
             medRef.child(String.valueOf(medicine.getRefMed())).setValue(medicine);
 
             linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").setValue(medicine);
-
-
             b.setText("Update");
-
         }
 
 
@@ -113,5 +124,52 @@ public class MedicineDetails extends AppCompatActivity {
         Intent intent = new Intent(this, Doses.class);
         startActivity(intent);
         finish();
+    }
+
+    public void deleteMedicineAndDoses(View view) {
+
+        final Medicine medicine  = (Medicine)
+                getIntent().getSerializableExtra("selectedMedicine");
+        Treatment treatment = (Treatment) getIntent().getSerializableExtra(
+                "selectedTreatment") ;
+
+        treatmentRef.child(String.valueOf(treatment.getNum_p())).removeValue();
+        linetRef.child(String.valueOf(treatment.getNum_p())).removeValue();
+        medRef.child(medicine.getRefMed()).removeValue();
+
+        doseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
+                    System.out.println("number of existing doses "+Dose.getNumberOfDoses());
+                    Dose dose = doseSnapshot.getValue(Dose.class);
+/*                    dose.setNumberOfDoses(dose.getNumberOfDoses()-1);
+                    dose.setDoseId(Dose.getNumberOfDoses()-1);
+                    System.out.println("this dose ID "+dose.getDoseId());*/
+
+
+                    if (medicine!=null && dose!=null && dose.getRefMed()!=null) {
+                        System.out.println(medicine.getRefMed());
+                        System.out.println(dose.getRefMed().getRefMed());
+                        if (dose.getRefMed().getRefMed().equals(medicine.getRefMed())) {
+                            doseRef.child(String.valueOf(dose.getDoseId())).removeValue();
+                        }
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        final Intent intent =  new Intent(this,Treatments.class);
+        startActivity(intent);
+        finish();
+
+
     }
 }

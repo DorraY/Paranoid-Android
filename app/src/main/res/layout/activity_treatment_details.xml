@@ -25,22 +25,22 @@
         android:id="@+id/delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginLeft="56dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginBottom="96dp"
-        android:text="Delete"
         android:onClick="deleteTreatment"
+        android:text="Delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/details"
-        app:layout_constraintVertical_bias="0.961" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
         android:layout_marginBottom="96dp"
         android:onClick="updateTreatment"
         android:text="Update"
@@ -125,5 +125,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/abandon"
         app:layout_constraintTop_toBottomOf="@+id/details" />
+
+    <Button
+        android:id="@+id/temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="Temperature"
+        app:layout_constraintBaseline_toBaselineOf="@+id/delete"
+        app:layout_constraintStart_toEndOf="@+id/delete" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

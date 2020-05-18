@@ -38,101 +38,43 @@ public class TreatmentDetails extends AppCompatActivity {
     String selectedMedicine;
     Medicine associatedMedicine;
 
-
-
-/*    private TextWatcher mTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-        @Override
-        public void afterTextChanged(Editable s) {
-            try {
-                checkFields();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-    } ;*/
-
-/*    void checkFields() throws ParseException {
-        Button b =    findViewById(R.id.save);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-        Date startDate = simpleDateFormat.parse(startDate.getText().toString());
-        Date endDate = simpleDateFormat.parse(endDate.getText().toString());
-
-
-        String s1 = startDate.getText().toString();
-        String s2 = endDate.getText().toString();
-        String s3 = sickness.getText().toString();
-
-
-        if(s1.equals("") || startDate.after(endDate) ||s2.equals("") || s3.equals("") || !validateJavaDate(s1) || !validateJavaDate(s2)){
-            b.setEnabled(false);
-        } else {
-            b.setEnabled(true);
-        }
-    }*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Treatment treatment = (Treatment)
                 getIntent().getSerializableExtra("selectedTreatment");
+        if (treatment!=null) {
+            linetRef.child(treatment.getNum_p().toString()).child("refMed").child("refMed").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue()!=null) {
+                        medRef.child((dataSnapshot.getValue()).toString()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue() != null) {
+                                    associatedMedicine = dataSnapshot.getValue(Medicine.class);
+                                    System.out.println("associated medicine "+associatedMedicine);
+                                    selectedMedicine = associatedMedicine.getRefMed();
+                                }
 
-        assert treatment != null;
-        linetRef.child(treatment.getNum_p().toString()).child("refMed").child("refMed").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                assert dataSnapshot.getValue() != null;
-                medRef.child((dataSnapshot.getValue()).toString()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        assert dataSnapshot.getValue() != null;
 
-                        associatedMedicine = dataSnapshot.getValue(Medicine.class);
-                        System.out.println("associated medicine "+associatedMedicine);
-                        selectedMedicine = associatedMedicine.getRefMed();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        doseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
-                    System.out.println(doseSnapshot.getValue());
-                    Dose dose = doseSnapshot.getValue(Dose.class);
-
-                    if (dose.getRefMed().getRefMed().equals(selectedMedicine)) {
-                        doseRef.child(String.valueOf(dose.getDoseId())).removeValue();
-                    }
-                    Dose.setNumberOfDoses(Dose.getNumberOfDoses()-1);
-                    dose.setDoseId(Dose.getNumberOfDoses());
                 }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
+                }
+            });
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
 
         setContentView(R.layout.activity_treatment_details);
@@ -237,28 +179,6 @@ public class TreatmentDetails extends AppCompatActivity {
         final Treatment treatment = (Treatment)
                 getIntent().getSerializableExtra("selectedTreatment");
 
-        doseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
-                    System.out.println(doseSnapshot.getValue());
-                    Dose dose = doseSnapshot.getValue(Dose.class);
-                    if (dose.getRefMed().getRefMed().equals(selectedMedicine)) {
-                        doseRef.child(String.valueOf(dose.getDoseId())).removeValue();
-                    }
-                    Dose.setNumberOfDoses(Dose.getNumberOfDoses()-1);
-                    dose.setDoseId(Dose.getNumberOfDoses());
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
         treatmentRef.child(String.valueOf(treatment.getNum_p())).removeValue();
         linetRef.child(String.valueOf(treatment.getNum_p())).removeValue();
 
@@ -273,7 +193,8 @@ public class TreatmentDetails extends AppCompatActivity {
         final Intent intent =  new Intent(this,MedicineDetails.class);
         intent.putExtra("selectedTreatment", selectedTreatment);
         intent.putExtra("selectedMedicine", associatedMedicine);
-        System.out.println(associatedMedicine);
+        /*System.out.println(associatedMedicine);
+        System.out.println(selectedTreatment);*/
 
         startActivity(intent);
         finish();

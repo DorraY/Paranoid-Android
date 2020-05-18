@@ -63,7 +63,7 @@ public class Treatments extends AppCompatActivity {
                     treatmentList.add(treatment);
                 }
 
-                ListView listView = (ListView) findViewById(R.id.treatments);
+                ListView listView = findViewById(R.id.treatments);
                 ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getApplicationContext(),
                         android.R.layout.simple_list_item_1,sicknesstList);
                 listView.setAdapter(arrayAdapter);
