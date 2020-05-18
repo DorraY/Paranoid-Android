@@ -37,6 +37,7 @@ public class MedicineDetails extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("med details created");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine_details);
         Medicine medicine  = (Medicine) getIntent().getSerializableExtra("selectedMedicine");
@@ -134,10 +135,6 @@ public class MedicineDetails extends AppCompatActivity {
         Treatment treatment = (Treatment) getIntent().getSerializableExtra(
                 "selectedTreatment") ;
 
-        treatmentRef.child(String.valueOf(treatment.getNum_p())).removeValue();
-        linetRef.child(String.valueOf(treatment.getNum_p())).removeValue();
-        medRef.child(medicine.getRefMed()).removeValue();
-
         doseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -149,7 +146,7 @@ public class MedicineDetails extends AppCompatActivity {
                         System.out.println(dose.getRefMed().getRefMed());
                         if (dose.getRefMed().getRefMed().equals(medicine.getRefMed())) {
                             doseRef.child(doseSnapshot.getKey()).removeValue();
-
+                            System.out.println("deleted successfully");
                         }
                     }
 
@@ -160,6 +157,13 @@ public class MedicineDetails extends AppCompatActivity {
 
             }
         });
+
+        treatmentRef.child(String.valueOf(treatment.getNum_p())).removeValue();
+        linetRef.child(String.valueOf(treatment.getNum_p())).removeValue();
+
+        medRef.child(medicine.getRefMed()).removeValue();
+
+
         Intent intent =  new Intent(this,Treatments.class);
         intent.putExtra("selectedMedicine",medicine);
         startActivity(intent);
