@@ -75,5 +75,10 @@ public class Treatments extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void gotomap(View v) {
+        Intent intent = new Intent(this , MapsActivity.class);
+        startActivity(intent);
+    }
+
 
 }
