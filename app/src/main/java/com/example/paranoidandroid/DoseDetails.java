@@ -142,9 +142,5 @@ public class DoseDetails extends AppCompatActivity {
         description.setText(dose.getDescription());
 
 
-
-
-
-
     }
 }

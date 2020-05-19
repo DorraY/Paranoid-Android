@@ -47,6 +47,13 @@ public class TreatmentForm extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 
+        String currentDateString = new SimpleDateFormat("dd/MM/yyyy",
+                Locale.getDefault()).format(new Date());
+
+        Date currentDate;
+
+        currentDate = simpleDateFormat.parse(currentDateString);
+
         Date startDate = simpleDateFormat.parse(start.getText().toString());
         Date endDate = simpleDateFormat.parse(end.getText().toString());
 
@@ -55,7 +62,7 @@ public class TreatmentForm extends AppCompatActivity {
         String s3 = sickness.getText().toString();
 
 
-        if(s1.equals("") || startDate.after(endDate) ||s2.equals("") || s3.equals("") || !validateJavaDate(s1) || !validateJavaDate(s2)){
+        if(s1.equals("") || currentDate.after(startDate) ||startDate.after(endDate) ||s2.equals("") || s3.equals("") || !validateJavaDate(s1) || !validateJavaDate(s2)){
             b.setEnabled(false);
         } else {
             b.setEnabled(true);
@@ -83,6 +90,7 @@ public class TreatmentForm extends AppCompatActivity {
 
         String date_n = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(new Date());
+
         TextView date  = (TextView) findViewById(R.id.startDate);
         date.setText(date_n);
 

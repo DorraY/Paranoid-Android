@@ -50,6 +50,14 @@ public class MedsForm extends AppCompatActivity {
     void checkFields() throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+        String currentDateString = new SimpleDateFormat("dd/MM/yyyy",
+                Locale.getDefault()).format(new Date());
+
+        Date currentDate;
+
+        currentDate = simpleDateFormat.parse(currentDateString);
+
+
         Date startDate = simpleDateFormat.parse(start.getText().toString());
         Date endDate = simpleDateFormat.parse(end.getText().toString());
         Button b = (Button) findViewById(R.id.saveMed);
@@ -57,7 +65,7 @@ public class MedsForm extends AppCompatActivity {
         String s2 = start.getText().toString();
         String s3 = end.getText().toString();
 
-        if( startDate.after(endDate)||s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) || !validateJavaDate(s3)){
+        if( startDate.after(endDate)|| currentDate.after(startDate)||s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) || !validateJavaDate(s3)){
             b.setEnabled(false);
         } else {
             b.setEnabled(true);

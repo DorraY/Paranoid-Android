@@ -54,6 +54,16 @@ public class DoseForm extends AppCompatActivity {
 
     void checkFields() throws ParseException {
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        String currentDateString = new SimpleDateFormat("dd/MM/yyyy",
+                Locale.getDefault()).format(new Date());
+
+        Date currentDate;
+
+        currentDate = simpleDateFormat.parse(currentDateString);
+
+
         Button b1 = findViewById(R.id.newDose);
         Button b2 = findViewById(R.id.endTreatment);
 
@@ -62,7 +72,10 @@ public class DoseForm extends AppCompatActivity {
         String s3 = time.getText().toString();
         String s4 = quantity.getText().toString();
 
-        if(!s3.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")|| s4.equals("")||s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) ){
+        Date startDate = simpleDateFormat.parse(s2);
+
+
+        if(!s3.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]")|| currentDate.after(startDate)|| s4.equals("")||s1.equals("")|| s2.equals("") ||s3.equals("")  || !validateJavaDate(s2) ){
             b1.setEnabled(false);
             b2.setEnabled(false);
         } else {

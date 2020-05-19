@@ -66,11 +66,18 @@ public class TreatmentDetails extends AppCompatActivity {
         String s2 = endDate.getText().toString();
         String s3 = sickness.getText().toString();
 
+        String currentDateString = new SimpleDateFormat("dd/MM/yyyy",
+                Locale.getDefault()).format(new Date());
+
+        Date currentDate;
+
+        currentDate = simpleDateFormat.parse(currentDateString);
+
         Date start = simpleDateFormat.parse(startDate.getText().toString());
         Date end = simpleDateFormat.parse(endDate.getText().toString());
 
 
-        if(s1.equals("") || start.after(end) ||s2.equals("") || s3.equals("") || !validateJavaDate(s1) || !validateJavaDate(s2)){
+        if(s1.equals("") || start.after(end)|| currentDate.after(start) ||s2.equals("") || s3.equals("") || !validateJavaDate(s1) || !validateJavaDate(s2)){
             b.setEnabled(false);
         } else {
             b.setEnabled(true);
