@@ -93,12 +93,15 @@ public class MedicineDetails extends AppCompatActivity {
         Date start = simpleDateFormat.parse(startDate.getText().toString());
         Date end = simpleDateFormat.parse(endDate.getText().toString());
 
+        if (b.getText().equals("Save")) {
 
-        if(s1.equals("") || start.after(end) ||  currentDate.after(start) ||s2.equals("") || s3.equals("") || !validateJavaDate(s1) || !validateJavaDate(s2)){
-            b.setEnabled(false);
-        } else {
-            b.setEnabled(true);
+            if(s1.equals("") || start.after(end) || !currentDate.equals(start) ||currentDate.after(start) ||s2.equals("") || s3.equals("") || !validateJavaDate(s1) || !validateJavaDate(s2)){
+                b.setEnabled(false);
+            } else {
+                b.setEnabled(true);
+            }
         }
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
