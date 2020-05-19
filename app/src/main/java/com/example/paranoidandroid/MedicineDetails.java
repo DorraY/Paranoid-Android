@@ -170,13 +170,12 @@ public class MedicineDetails extends AppCompatActivity {
 
             medicine.setRefMed(refMed.getText().toString());
 
-            Date start = simpleDateFormat.parse(startDate.getText().toString());
-            Date end = simpleDateFormat.parse(endDate.getText().toString());
+            final Date start = simpleDateFormat.parse(startDate.getText().toString());
+            final Date end = simpleDateFormat.parse(endDate.getText().toString());
             medicine.setDateDebCons(start);
             medicine.setDateEnd(end);
 
-            medRef.child(String.valueOf(medicine.getRefMed())).setValue(medicine);
-            linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").setValue(medicine);
+
             b.setText("Update");
             doseRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -188,11 +187,7 @@ public class MedicineDetails extends AppCompatActivity {
                             System.out.println(medicine.getRefMed());
                             System.out.println(dose.getRefMed().getRefMed());
                             if (dose.getRefMed().getRefMed().equals(medicine.getRefMed())) {
-                                //doseSnapshot.getValue(Dose.class).setRefMed(medicine);
-                                //doseRef.child(doseSnapshot.getKey()).c
-                                System.out.println( " bla bla bla  "    +doseRef.child(doseSnapshot.getKey()).child("refMed").setValue(medicine));
-
-
+                                System.out.println(doseRef.child(dose.getDoseId()).child("refMed").setValue(medicine));;
                             }
                         }
 
@@ -204,6 +199,8 @@ public class MedicineDetails extends AppCompatActivity {
                 }
             });
         }
+        medRef.child(String.valueOf(medicine.getRefMed())).setValue(medicine);
+        linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").setValue(medicine);
 
 
 
