@@ -45,7 +45,14 @@ public class Temperatures extends AppCompatActivity {
 
                 for (DataSnapshot tempSnapshot: dataSnapshot.getChildren()) {
                     Temperature temperature = tempSnapshot.getValue(Temperature.class);
+                    System.out.println(temperature);
                     if (temperature.getNum_p().getNum_p().equals(selectedTreatment.getNum_p())) {
+                        temperatureDegreeList.add(temperature.getDegree());
+                        temperatureList.add(temperature);
+                    }
+                    System.out.println((temperature.getNum_p().getNum_p().equals(selectedTreatment.getNum_p())));
+                    System.out.println(temperature.getNum_p().equals(selectedTreatment));
+                    if (temperature.getNum_p().equals(selectedTreatment)) {
                         temperatureDegreeList.add(temperature.getDegree());
                         temperatureList.add(temperature);
                     }

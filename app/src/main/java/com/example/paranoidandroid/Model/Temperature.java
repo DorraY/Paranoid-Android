@@ -6,19 +6,20 @@ public class Temperature implements Serializable {
 
     private static Integer numberOfTemps=0;
 
-    private Integer numTemp;
+    private String numTemp;
     private Double degree;
     private Treatment num_p;
 
     public Temperature() {
-        this.numTemp = numberOfTemps++;
+
+        numberOfTemps++;
     }
 
-    public Integer getNumTemp() {
+    public String getNumTemp() {
         return numTemp;
     }
 
-    public void setNumTemp(Integer numTemp) {
+    public void setNumTemp(String numTemp) {
         this.numTemp = numTemp;
     }
 
@@ -44,5 +45,14 @@ public class Temperature implements Serializable {
 
     public static void setNumberOfTemps(Integer numberOfTemps) {
         Temperature.numberOfTemps = numberOfTemps;
+    }
+
+    @Override
+    public String toString() {
+        return "Temperature{" +
+                "numTemp='" + numTemp + '\'' +
+                ", degree=" + degree +
+                ", num_p=" + num_p +
+                '}';
     }
 }

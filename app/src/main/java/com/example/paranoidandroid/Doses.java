@@ -37,6 +37,7 @@ public class Doses extends AppCompatActivity {
         final DatabaseReference doseRef =
                 FirebaseDatabase.getInstance().getReference("Dose/");
 
+
         doseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -90,5 +91,6 @@ public class Doses extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(),DoseForm.class);
         intent.putExtra("myMedicine",medicine);
         startActivity(intent);
+        finish();
     }
 }

@@ -33,6 +33,7 @@ public class Treatments extends AppCompatActivity {
 
     Button addTreatmentButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

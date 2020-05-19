@@ -81,7 +81,10 @@ public class TemperatureForm extends AppCompatActivity {
         temperature.setNum_p(treatment);
         temperature.setDegree(Double.parseDouble(String.valueOf(temperatureTag.getText())));
 
-        tempRef.child(String.valueOf(temperature.getNumTemp())).setValue(temperature);
+        DatabaseReference newRow = tempRef.push();
+        temperature.setNumTemp(newRow.getKey());
+        newRow.setValue(temperature);
+
 
         System.out.println(temperature);
 

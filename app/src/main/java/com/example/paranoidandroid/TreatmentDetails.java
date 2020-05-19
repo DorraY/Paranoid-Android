@@ -1,6 +1,7 @@
 package com.example.paranoidandroid;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,7 +14,9 @@ import android.widget.EditText;
 
 import com.example.paranoidandroid.Model.Dose;
 import com.example.paranoidandroid.Model.Medicine;
+import com.example.paranoidandroid.Model.Temperature;
 import com.example.paranoidandroid.Model.Treatment;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +41,8 @@ public class TreatmentDetails extends AppCompatActivity {
             FirebaseDatabase.getInstance().getReference("Dose");
     final DatabaseReference medRef =
             FirebaseDatabase.getInstance().getReference("Medicament");
+    final DatabaseReference tempRef =
+            FirebaseDatabase.getInstance().getReference("Temperature");
     String selectedMedicine;
     Medicine associatedMedicine;
 
@@ -139,9 +144,6 @@ public class TreatmentDetails extends AppCompatActivity {
             });
         }
 
-
-
-
         String startDateString = new SimpleDateFormat("dd/MM/yyyy",
                 Locale.getDefault()).format(treatment.getStart_date());
         String endDateString = new SimpleDateFormat("dd/MM/yyyy",
@@ -207,6 +209,7 @@ public class TreatmentDetails extends AppCompatActivity {
         treatment.setStart_date(start);
         treatment.setEnd_date(end);
         treatmentRef.child(String.valueOf(treatment.getNum_p())).setValue(treatment);
+        linetRef.child(String.valueOf(treatment.getNum_p())).child("num_p").setValue(treatment);
         b.setText("Update");
     }
 
@@ -238,6 +241,25 @@ public class TreatmentDetails extends AppCompatActivity {
 
         treatmentRef.child(String.valueOf(treatment.getNum_p())).removeValue();
         linetRef.child(String.valueOf(treatment.getNum_p())).removeValue();
+
+        tempRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot tempSnapshot: dataSnapshot.getChildren()) {
+                    Temperature temperature = tempSnapshot.getValue(Temperature.class) ;
+
+                    if (temperature.getNum_p().getNum_p().equals(treatment.getNum_p())) {
+                        tempRef.child(temperature.getNumTemp()).removeValue();
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         Intent intent =  new Intent(this,Treatments.class);
         startActivity(intent);

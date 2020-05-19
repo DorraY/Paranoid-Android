@@ -22,7 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MedicineDetails extends AppCompatActivity {
@@ -31,7 +33,7 @@ public class MedicineDetails extends AppCompatActivity {
             FirebaseDatabase.getInstance().getReference("Medicament");
     final DatabaseReference linetRef = FirebaseDatabase.getInstance().getReference(
             "Ligne_medicament");
-    final DatabaseReference doseRef =
+    final DatabaseReference dosesRef =
             FirebaseDatabase.getInstance().getReference("Dose");
     final DatabaseReference treatmentRef = FirebaseDatabase.getInstance().getReference(
             "Programme");
@@ -185,22 +187,21 @@ public class MedicineDetails extends AppCompatActivity {
             medicine.setDateDebCons(start);
             medicine.setDateEnd(end);
 
-
             b.setText("Update");
-            doseRef.addValueEventListener(new ValueEventListener() {
+            dosesRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
                         System.out.println("number of existing doses "+Dose.getNumberOfDoses());
                         Dose dose = doseSnapshot.getValue(Dose.class);
                         if (medicine!=null && dose!=null && dose.getRefMed()!=null) {
-                            System.out.println(medicine.getRefMed());
-                            System.out.println(dose.getRefMed().getRefMed());
+                            dose.setRefMed(medicine);
                             if (dose.getRefMed().getRefMed().equals(medicine.getRefMed())) {
-                                System.out.println(doseRef.child(dose.getDoseId()).child("refMed").setValue(medicine));;
+                                System.out.println("selected dose " + dose );
+                                dosesRef.child(dose.getDoseId()).setValue(dose);
+
                             }
                         }
-
                     }
                 }
                 @Override
@@ -211,10 +212,6 @@ public class MedicineDetails extends AppCompatActivity {
         }
         medRef.child(String.valueOf(medicine.getRefMed())).setValue(medicine);
         linetRef.child(String.valueOf(treatment.getNum_p())).child("refMed").setValue(medicine);
-
-
-
-
 
     }
 
@@ -232,12 +229,14 @@ public class MedicineDetails extends AppCompatActivity {
 
         final Medicine medicine  = (Medicine)
                 getIntent().getSerializableExtra("selectedMedicine");
-        Treatment treatment = (Treatment) getIntent().getSerializableExtra(
+        final Treatment treatment = (Treatment) getIntent().getSerializableExtra(
                 "selectedTreatment") ;
+        Intent intent =  new Intent(this,Treatments.class);
 
-        doseRef.addValueEventListener(new ValueEventListener() {
+        dosesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 for (DataSnapshot doseSnapshot: dataSnapshot.getChildren()) {
                     System.out.println("number of existing doses "+Dose.getNumberOfDoses());
                     Dose dose = doseSnapshot.getValue(Dose.class);
@@ -245,11 +244,10 @@ public class MedicineDetails extends AppCompatActivity {
                         System.out.println(medicine.getRefMed());
                         System.out.println(dose.getRefMed().getRefMed());
                         if (dose.getRefMed().getRefMed().equals(medicine.getRefMed())) {
-                            doseRef.child(doseSnapshot.getKey()).removeValue();
-                            System.out.println("deleted successfully");
+                            //dosesRef.child(dose.getDoseId()).removeValue();
                         }
-                    }
 
+                    }
                 }
             }
             @Override
@@ -258,14 +256,11 @@ public class MedicineDetails extends AppCompatActivity {
             }
         });
 
+
         treatmentRef.child(String.valueOf(treatment.getNum_p())).removeValue();
         linetRef.child(String.valueOf(treatment.getNum_p())).removeValue();
-
         medRef.child(medicine.getRefMed()).removeValue();
 
-
-        Intent intent =  new Intent(this,Treatments.class);
-        intent.putExtra("selectedMedicine",medicine);
         startActivity(intent);
         finish();
 

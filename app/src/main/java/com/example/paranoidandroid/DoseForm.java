@@ -167,8 +167,8 @@ public class DoseForm extends AppCompatActivity {
         //dose.setTime(simpleTimeFormat.parse(time.getText().toString()));
 
 
-        //doseRef.child(String.valueOf(dose.getDoseId())).push().setValue(dose);
-        //doseRef.push().setValue(dose);
+        //dosesRef.child(String.valueOf(dose.getDoseId())).push().setValue(dose);
+        //dosesRef.push().setValue(dose);
 
         DatabaseReference newRow = doseRef.push();
         dose.setDoseId(newRow.getKey());
@@ -176,6 +176,7 @@ public class DoseForm extends AppCompatActivity {
 
         Intent intent = new Intent(this, Treatments.class);
         startActivity(intent);
+        finish();
     }
 
 

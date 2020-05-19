@@ -178,7 +178,8 @@ public class DoseDetails extends AppCompatActivity {
             doseRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    doseRef.child(dataSnapshot.getKey()).setValue(dose);
+
+                    doseRef.child(dose.getDoseId()).setValue(dose);
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
