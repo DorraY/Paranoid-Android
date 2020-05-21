@@ -23,6 +23,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.annotation:annotation:1.1.0'
@@ -37,6 +38,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.3.1'
     implementation 'com.firebaseui:firebase-ui-auth:4.2.0'
     implementation 'com.firebase:firebase-client-android:2.3.1'
+
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
 
     com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
 

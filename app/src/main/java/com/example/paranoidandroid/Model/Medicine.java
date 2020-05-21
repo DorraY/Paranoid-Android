@@ -9,6 +9,13 @@ public class Medicine implements Serializable {
     private Date dateDebCons;
     private Date dateEnd;
 
+    public Medicine(Date dateDebCons, Date dateEnd) {
+        this.dateDebCons = dateDebCons;
+        this.dateEnd = dateEnd;
+    }
+
+    public Medicine () {}
+
     public String getRefMed() {
         return refMed;
     }

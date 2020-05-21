@@ -6,6 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 
+import android.graphics.Color;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 public class NotificationHelper extends ContextWrapper {
@@ -13,6 +14,7 @@ public class NotificationHelper extends ContextWrapper {
     public static final String channelID = "channelID";
     public static final String channelName = "Channel Name";
     private NotificationManager mManager;
+
     public NotificationHelper(Context base) {
         super(base);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -30,10 +32,12 @@ public class NotificationHelper extends ContextWrapper {
         }
         return mManager;
     }
-    public NotificationCompat.Builder getChannelNotification() {
+    public NotificationCompat.Builder getChannelNotification(String title, String body) {
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
-                .setContentTitle("Alarm!")
-                .setContentText("Your AlarmManager is working.")
+                .setContentTitle(title)
+                .setContentText(body)
+                .setVibrate(new long[] {1000, 1000, 1000, 1000, 10000})
+                .setLights(Color.RED, 3000, 3000)
                 .setSmallIcon(R.drawable.ic_android);
     }
 }

@@ -23,8 +23,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.paranoidandroid.Model.Medicine;
+import com.example.paranoidandroid.ServiceFirebase.ServiceMedicine;
 import com.example.paranoidandroid.Treatments;
 import com.example.paranoidandroid.R;
+import com.example.paranoidandroid.backgroundService.BackgroundService;
+
+import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        startService(new Intent(this, BackgroundService.class));
+
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
@@ -41,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login1);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        ServiceMedicine serviceMedicine = new ServiceMedicine();
+        serviceMedicine.saveMedicine(new Medicine(new Date(),new Date()));
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
